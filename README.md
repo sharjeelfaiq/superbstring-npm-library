@@ -21,7 +21,7 @@ yarn add superbstring
 Import the entire superbstring library:
 
 ```javascript
-const stringmy = require("superbstring");
+const superbString = require("superbstring");
 ```
 
 or import specific functions:

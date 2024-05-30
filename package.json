@@ -1,0 +1,60 @@
+{
+  "name": "superbstring",
+  "version": "1.0.0",
+  "description": "Superbstring is a versatile JavaScript package that provides a comprehensive set of functions to manipulate strings for both frontend and backend applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sharjeelfaiq/superbstring.git"
+  },
+  "keywords": [
+    "splitString",
+    "joinString",
+    "base64Enode",
+    "compare",
+    "base64Decode",
+    "removeExtraSpaces",
+    "removeAllSpaces",
+    "removeAllSymbols",
+    "duplicate",
+    "reverse",
+    "slugify",
+    "truncate",
+    "paraToSingleLine",
+    "alphabetize",
+    "zalgo",
+    "rotate13Deg",
+    "encodeUri",
+    "decodeUri",
+    "unixToDate",
+    "unixToTime",
+    "formatNumbers",
+    "extractText",
+    "extractNumber",
+    "addPrefix",
+    "addSuffix",
+    "decimalToRoman",
+    "romanToDecimal",
+    "reverseTitleCase",
+    "invertCase",
+    "camelCase",
+    "pascalCase",
+    "kebabCase",
+    "snakeCase",
+    "alternateCase1",
+    "alternateCase2",
+    "getDummyText",
+    "getRandomCharacters",
+    "getNumbers",
+    "getQuote"
+  ],
+  "author": "Sharjeel Faiq",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sharjeelfaiq/superbstring/issues"
+  },
+  "homepage": "https://github.com/sharjeelfaiq/superbstring#readme"
+}
