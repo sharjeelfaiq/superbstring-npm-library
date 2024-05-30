@@ -73,3 +73,6 @@ Superbstring offers a wide range of functions for various string manipulation ta
 - **getRandomCharacters(length)**: Generates a random string of a specified length with optional control over the character set used.
 - **getNumbers(startingNum, endingNum)**: Generates a sequence of numbers with starting and ending boundery numbers.
 - **getQuote()**: Generates a random quote with the quote and its author as separate elements in the returned object.
+
+### Support
+Feel free to contribute and make superbstring a better choice.
