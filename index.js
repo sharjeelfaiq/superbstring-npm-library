@@ -365,11 +365,11 @@ const decodeUri = (str) => {
 /**
  * Converts a Unix timestamp to a formatted date string.
  *
- * @param {number} str - The Unix timestamp to convert.
+ * @param {number} num - The Unix timestamp to convert.
  * @returns {string} The formatted date string.
  */
-const unixToDate = (str) => {
-  const date = new Date(str * 1000);
+const unixToDate = (num) => {
+  const date = new Date(num * 1000);
   const convertedStr = date.toLocaleDateString("en-US");
   return convertedStr;
 };
@@ -377,11 +377,11 @@ const unixToDate = (str) => {
 /**
  * Converts a Unix timestamp to a formatted time string.
  *
- * @param {number} str - The Unix timestamp to convert.
+ * @param {number} num - The Unix timestamp to convert.
  * @returns {string} The formatted time string in the format "hours : minutes : seconds".
  */
-const unixToTime = (str) => {
-  const date = new Date(str * 1000);
+const unixToTime = (num) => {
+  const date = new Date(num * 1000);
   const hours = date.getHours();
   const minutes = "0" + date.getMinutes();
   const seconds = "0" + date.getSeconds();
@@ -409,7 +409,6 @@ const formatNumbers = (str) => {
  * @returns {string} - The extracted alphabetic characters as a single string.
  */
 const extractText = (str) => {
-  console.log("STR ====== ", str);
   const regex = /[A-Z/a-z/ /]/g;
   const letters = str.match(regex);
   console.log("letters", letters);
