@@ -66,7 +66,6 @@ Superbstring offers a wide range of functions for various string manipulation ta
 - **alternateCase2(string)**: Applies a different alternating case pattern to a string.
 - **getDummyText()**: Generates dummy text content with a specified number of paragraphs and sentences.
 - **getRandomCharacters(length)**: Generates a random string of a specified length with optional control over the character set used.
-- **getNumbers(startingNum, endingNum)**: Generates a sequence of numbers with starting and ending boundery numbers.
 
 ### Support
 
