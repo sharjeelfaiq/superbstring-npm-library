@@ -8,7 +8,13 @@ Install superbstring using npm, pnpm or yarn:
 
 ```bash
 npm install superbstring
+```
+
+```bash
 pnpm add superbstring
+```
+
+```bash
 yarn add superbstring
 ```
 
