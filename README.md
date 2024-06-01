@@ -2,6 +2,8 @@
 
 Superbstring is a versatile JavaScript package that provides a comprehensive set of functions to manipulate strings for both frontend and backend applications.
 
+Visit the documentation at --> https://superbstring-documentation.netlify.app/
+
 ### Installation
 
 Install superbstring using npm, pnpm or yarn:
