@@ -371,7 +371,6 @@ const decodeUri = (str) => {
 const extractText = (str) => {
   const regex = /[A-Z/a-z/ /]/g;
   const letters = str.match(regex);
-  console.log("letters", letters);
   const extractedText = letters.join("");
   return extractedText;
 };
