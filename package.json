@@ -1,6 +1,6 @@
 {
   "name": "superbstring",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Superbstring is a versatile JavaScript package that provides a comprehensive set of functions to manipulate strings for both frontend and backend applications.",
   "main": "index.js",
   "scripts": {
