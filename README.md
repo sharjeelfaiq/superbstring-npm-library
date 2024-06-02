@@ -9,15 +9,15 @@ Superbstring is a versatile JavaScript package that provides a comprehensive set
 Install superbstring using npm, pnpm or yarn:
 
 ```bash
-npm install superbstring
+npm install superbstring --save-dev
 ```
 
 ```bash
-pnpm add superbstring
+pnpm add superbstring -D
 ```
 
 ```bash
-yarn add superbstring
+yarn add superbstring -D
 ```
 
 ### Usage
