@@ -27,7 +27,7 @@ export const joinString = (str: string) => {
  * @param {string} str - The string to be encoded.
  * @returns {string} The encoded string.
  */
-export const base64Enode = (str: string) => {
+export const base64Encode = (str: string) => {
   const encodedStr = btoa(str);
   return encodedStr;
 };
