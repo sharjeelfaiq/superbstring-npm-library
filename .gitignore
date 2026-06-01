@@ -1,6 +1,4 @@
 node_modules/
 dist/
 .codegraph/
-package-lock.json
-pnpm-lock.yaml
 *.tgz

@@ -1,10 +1,11 @@
 # SuperbString
 
 [![npm version](https://img.shields.io/npm/v/superbstring.svg)](https://www.npmjs.com/package/superbstring)
-[![npm downloads](https://img.shields.io/npm/dm/superbstring.svg)](https://www.npmjs.com/package/superbstring)
-[![license](https://img.shields.io/npm/l/superbstring.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-types%20included-blue.svg)](dist/index.d.ts)
-[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
+[![npm weekly downloads](https://img.shields.io/npm/dw/superbstring.svg)](https://www.npmjs.com/package/superbstring)
+[![license: ISC](https://img.shields.io/npm/l/superbstring.svg)](LICENSE)
+[![TypeScript support](https://img.shields.io/badge/TypeScript-supported-blue.svg)](dist/index.d.ts)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen.svg)](package.json)
+[![CI](https://github.com/sharjeelfaiq/superbstring/actions/workflows/ci.yml/badge.svg)](https://github.com/sharjeelfaiq/superbstring/actions/workflows/ci.yml)
 
 SuperbString is a zero-dependency JavaScript and TypeScript string utilities package for text cleanup, string manipulation, slug generation, Base64 encoding, URI encoding, formatting, parsing, and lightweight text processing.
 
