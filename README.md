@@ -380,6 +380,12 @@ const numbers: string = extractNumber("Order #123");
 - **Practical utilities:** common string manipulation, text cleanup, string formatting, encoding, decoding, and parsing helpers in one package.
 - **TypeScript support:** declarations are included for editor autocomplete and type checking.
 
+## Project Information
+
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security Policy](SECURITY.md)
+
 ## License
 
 [ISC](LICENSE)
