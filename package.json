@@ -4,8 +4,15 @@
   "description": "Superbstring is a versatile JavaScript package that provides a comprehensive set of functions to manipulate strings for both frontend and backend applications.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "npm run build && node --test"
   },
   "repository": {
     "type": "git",
@@ -43,6 +50,9 @@
     "url": "https://github.com/sharjeelfaiq/superbstring/issues"
   },
   "homepage": "https://github.com/sharjeelfaiq/superbstring#readme",
+  "engines": {
+    "node": ">=16"
+  },
   "devDependencies": {
     "@types/node": "^20.14.0",
     "typescript": "^5.4.5"

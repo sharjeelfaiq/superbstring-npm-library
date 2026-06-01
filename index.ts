@@ -95,7 +95,7 @@ export const removeAllSpaces = (str: string) => {
  * @returns {string} The modified string with symbols removed.
  */
 export const removeAllSymbols = (str: string) => {
-  const regex = /[0-9/A-Z/a-z/ /]/g;
+  const regex = /[0-9A-Za-z ]/g;
   const letters = str.match(regex);
   const symbolFreeStr = letters ? letters.join("") : "";
   return symbolFreeStr;
@@ -376,7 +376,7 @@ export const decodeUri = (str: string) => {
  * @returns {string} - The extracted alphabetic characters as a single string.
  */
 export const extractText = (str: string) => {
-  const regex = /[A-Z/a-z/ /]/g;
+  const regex = /[A-Za-z ]/g;
   const letters = str.match(regex);
   const extractedText = letters ? letters.join("") : "";
   return extractedText;
@@ -389,7 +389,7 @@ export const extractText = (str: string) => {
  * @returns {string} - The extracted numbers as a string.
  */
 export const extractNumber = (str: string) => {
-  const regex = /[0-9/ /]/g;
+  const regex = /[0-9 ]/g;
   const nums = str.match(regex);
   const extractedNumber = nums ? nums.join("") : "";
   return extractedNumber;

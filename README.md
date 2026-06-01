@@ -1,235 +1,243 @@
-## superbstring: String Manipulation Utility for JavaScript
+# superbstring
 
-Superbstring is a versatile JavaScript package that provides a comprehensive set of functions to manipulate strings for both frontend and backend applications.
+String manipulation utilities for JavaScript and TypeScript projects.
 
-**DOCUMENTATION** https://t.ly/sYjic
-
-### Installation
-
-Install superbstring using npm, pnpm or yarn:
+## Installation
 
 ```bash
-npm install superbstring --save-dev
+npm install superbstring
 ```
 
 ```bash
-pnpm add superbstring -D
+pnpm add superbstring
 ```
 
 ```bash
-yarn add superbstring -D
+yarn add superbstring
 ```
 
-### Usage
-
-Import the entire superbstring library:
+## Usage
 
 ```javascript
-// ES5 Import
 const superbString = require("superbstring");
 
-// ES6 Import
-import suberbstring from "superb-string";
+superbString.slugify("Hello, World!"); // "hello-world"
 ```
 
-or import specific functions:
-
 ```javascript
-// ES5 Import
 const { splitString, joinString } = require("superbstring");
 
-// ES6 Import
-import { splitString, joinString } from "superb-string";
+splitString("Hello World", " "); // "Hello\nWorld"
+joinString("Hello\nWorld"); // "Hello World"
 ```
 
-### Available Functions
+Type declarations are included for TypeScript consumers.
 
-Superbstring offers a wide range of functions for various string manipulation tasks. Here's a brief description of each function:
+## API
 
-- **splitString(string, delimiter)**: Splits a string into an array of substrings based on the provided delimiter.
+### splitString(string, delimiter = " ")
+
+Replaces each delimiter occurrence with a newline character.
 
 ```javascript
-const string = "Hello World";
-const delimiter = " ";
-superbString.splitString(string, delimiter);
-// Hello
-// World
+splitString("Hello World", " "); // "Hello\nWorld"
 ```
 
-- **joinString(string)**: Join strings separated on new lines into a single string using the blank space(s) as a delimiter.
+### joinString(string)
+
+Replaces newline characters with spaces.
 
 ```javascript
-const string = "Hello\nWorld";
-superbString.joinString(string); // "Hello World"
+joinString("Hello\nWorld"); // "Hello World"
 ```
 
-- **base64Encode(string)**: Converts a string or a number to a Base64 encoded string.
+### base64Encode(string)
+
+Encodes a string as Base64.
 
 ```javascript
-const string = "The quick brown fox jumps over the lazy dog.";
-superbString.base64Encode(string); // VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4=
+base64Encode("The quick brown fox."); // "VGhlIHF1aWNrIGJyb3duIGZveC4="
 ```
 
-- **base64Decode(string)**: Decodes a Base64 encoded string.
+### base64Decode(string)
+
+Decodes a Base64 string. Malformed input may throw the platform decoder error.
 
 ```javascript
-const encodedString =
-  "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4=";
-superbString.base64Decode(encodedString); // The quick brown fox jumps over the lazy dog.
+base64Decode("VGhlIHF1aWNrIGJyb3duIGZveC4="); // "The quick brown fox."
 ```
 
-- **compare(string1, string2)**: Compares a string and its base64 encoded version and returns true if similar and flase if not in the comparison result.
+### compare(string, encodedString)
+
+Returns `true` when `encodedString` decodes to `string`; otherwise returns `false`.
 
 ```javascript
-const string1 = "The quick brown fox jumps over the lazy dog";
-const string2 = "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4";
-superbString.compare(string1, string2); // true
-
-const string1 = "The old brown fox lives with the lazy dog";
-const string2 = "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4";
-superbString.compare(string1, string2); // false
+compare("hello", "aGVsbG8="); // true
+compare("hello", "d29ybGQ="); // false
 ```
 
-- **removeExtraSpaces(string)**: Removes extra spaces from a string, leaving spaces only between words.
+### removeExtraSpaces(string)
+
+Collapses whitespace to single spaces, trims leading/trailing whitespace, and removes spaces before punctuation.
 
 ```javascript
-const string = "   One   space   between   each   word    ";
-uperbString.removeExtraSpaces(string); // One space between each word
+removeExtraSpaces("   One   space   between   each   word    ");
+// "One space between each word"
 ```
 
-- **removeAllSpaces(string)**: Removes all spaces from a string.
+### removeAllSpaces(string)
+
+Removes all whitespace.
 
 ```javascript
-const string = "   No   space   anywhere    ";
-superbString.removeAllSpaces(string); // Nospaceanywhere
+removeAllSpaces("   No   space   anywhere    "); // "Nospaceanywhere"
 ```
 
-- **removeAllSymbols(string)**: Removes all symbols from a string, leaving only alphanumeric characters.
+### removeAllSymbols(string)
+
+Removes symbols and keeps alphanumeric characters and spaces.
 
 ```javascript
-const string = "Hello, World!";
-superbString.removeAllSymbols(string); // Hello World
+removeAllSymbols("Hello, World!"); // "Hello World"
 ```
 
-- **duplicate(string, count)**: Duplicates a string a specified number of times.
+### duplicate(string, count = 2)
+
+Repeats a string. Invalid counts use the native `String.prototype.repeat` behavior.
 
 ```javascript
-const string = "hello";
-const count = 3;
-superbString.duplicate(string, count); // hellohellohello
+duplicate("hello", 3); // "hellohellohello"
 ```
 
-- **reverse(string)**: Reverses the characters in a string.
+### reverse(string)
+
+Reverses UTF-16 code units in a string.
 
 ```javascript
-const string = "hello";
-superbString.reverse(string); // olleh
+reverse("hello"); // "olleh"
 ```
 
-- **slugify(string)**: Converts a string to a slug format, suitable for URLs.
+### slugify(string)
+
+Lowercases a string, replaces spaces with hyphens, and removes non-word characters except hyphens.
 
 ```javascript
-const string = "Hello, World!";
-superbString.slugify(string); // hello-world
+slugify("Hello, World!"); // "hello-world"
 ```
 
-- **truncate(string, maxLength)**: Truncates a string to a specific maximum length.
+### truncate(string, maxLength)
+
+Returns `string.substring(0, maxLength)`.
 
 ```javascript
-const string = "Big Cat lives in the Jungle";
-const maxLength = 13;
-superbString.truncate(string, maxLength); // Big Cat lives
+truncate("Big Cat lives in the Jungle", 13); // "Big Cat lives"
 ```
 
-- **paraToSingleLine(string)**: Converts a paragraph string into a single line by removing line breaks.
+### paraToSingleLine(string)
+
+Collapses whitespace into single spaces.
 
 ```javascript
-const string = "Why so serious?\nLet's put a smile on that face.";
-superbString.paraToSingleLine(string); // Why so serious? Let's put a smile on that face.
+paraToSingleLine("Why so serious?\nLet's smile.");
+// "Why so serious? Let's smile."
 ```
 
-- **alphabetize(string)**: Sorts the characters/words of a string alphabetically.
+### alphabetize(string)
+
+Sorts space-separated words using `localeCompare`.
 
 ```javascript
-const string = "Welcome to the world of JavaScript!";
-superbString.alphabetize(string); //JavaScript! of the to Welcome world
+alphabetize("Welcome to the world of JavaScript!");
+// "JavaScript! of the to Welcome world"
 ```
 
-- **zalgo(string)**: Applies the Zalgo text effect to a string (for decorative purposes).
+### zalgo(string)
+
+Adds random combining marks to each non-space character.
 
 ```javascript
-const string = "Decorate me with zalgo!";
-superbString.zalgo(string);
-// D̡̳͔҉̬e͚̪ͫ̒̂̕͟c͋҉̤̥ͮǫ̻͍͕̍ŗ̵̧̜̣͈͓̓͛͌͜ͅą̴̶̓͆͘tě̴̶͓͕̓ͣ͊ͅ m̸̛̺͕͊̑͟͡è̶̮͔̫̓́̊͢͜͡ͅ w̴̷̵̢̞̥͆͗́̕̚͝͡ͅi͖͝͝tͮ͝͏̷̭͗̄̽͑h̢̧̤̼͋̏͑ͧ͆̽̽̉̒̎ z҉͕̘͉́̀͘͢a͎͛̍͏̸̶̢̛̮̯̞̬̮̋l̴̷͙ͯͭ̀͘͏̢̯̠͂̚͞g̖͓̤̍͗ͮ́ͅo͝҉̴̷̗͙̐̎͂͘҉͖͕͐͢!̶̧̡̼̪̟̙̥̪̮̿ͭ̅
+zalgo("Decorate me");
 ```
 
-- **rotate13Deg(string)**: Performs a Caesar cipher shift by 13 positions on a string.
+### rotate13Deg(string)
+
+Applies ROT13 to alphabetic characters. Non-letters are unchanged.
 
 ```javascript
-const string = "Hello World!";
-superbString.rotate13Deg(string); // Uryyb Jbeyq!
-
-const string = "Uryyb Jbeyq!";
-superbString.rotate13Deg(string); // Hello World!
+rotate13Deg("Hello World!"); // "Uryyb Jbeyq!"
+rotate13Deg("Uryyb Jbeyq!"); // "Hello World!"
 ```
 
-- **encodeUri(string)**: Encodes a string for use in URLs.
+### encodeUri(string)
+
+Encodes a URI using `encodeURI`.
 
 ```javascript
-const string = "Hello, World!";
-superbString.encodeUri(string); // Hello,%20World!
+encodeUri("Hello, World!"); // "Hello,%20World!"
 ```
 
-- **decodeUri(string)**: Decodes a URL-encoded string.
+### decodeUri(string)
+
+Decodes a URI using `decodeURI`. Malformed input throws `URIError`.
 
 ```javascript
-const string = "Hello,%20World!";
-superbString.encodeUri(string); // Hello, World!
+decodeUri("Hello,%20World!"); // "Hello, World!"
 ```
 
-- **extractText(string)**: Extracts text content from a string.
+### extractText(string)
+
+Keeps letters and spaces only.
 
 ```javascript
-const string = "3.14 is a pi number.";
-superbString.extractText(string); // is a pi number;
+extractText("3.14 is a pi number."); // " is a pi number"
 ```
 
-- **extractNumber(string)**: Extracts numerical digits from a string.
+### extractNumber(string)
+
+Keeps digits and spaces only.
 
 ```javascript
-const string = "4 apples, 3 oranges, 1 banana, 2 pears";
-superbString.extractNumber(string); // 4  3  1  2
+extractNumber("4 apples, 3 oranges, 1 banana, 2 pears");
+// "4  3  1  2 "
 ```
 
-- **addPrefix(string, prefix)**: Adds a prefix to the beginning of a string.
+### addPrefix(string, prefix)
+
+Adds a prefix.
 
 ```javascript
-const string = "world";
-superbString.addPrefix(string, "hello "); // hello world
+addPrefix("world", "hello "); // "hello world"
 ```
 
-- **addSuffix(string, suffix)**: Adds a suffix to the end of a string.
+### addSuffix(string, suffix)
+
+Adds a suffix.
 
 ```javascript
-const string = "hello";
-superbString.addSuffix(string, " world"); // hello world
+addSuffix("hello", " world"); // "hello world"
 ```
 
-- **getDummyText()**: Generates dummy text content.
+### getDummyText()
+
+Returns placeholder text.
 
 ```javascript
-superbString.getDummyText();
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit, tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit, quia. Quo neque error repudiandae fuga? Ipsa laudantium molestias eos sapiente officiis modi at sunt excepturi expedita sint? Sed quibusdam recusandae alias error harum maxime adipisci amet laborum. Perspiciatis minima nesciunt dolorem! Officiis iure rerum voluptates a cumque velit quibusdam sed amet tempora. Sit laborum ab, eius fugit doloribus tenetur fugiat, temporibus enim commodi iusto libero magni deleniti quod quam consequuntur! Commodi minima excepturi repudiandae velit hic maxime doloremque. Quaerat provident commodi consectetur veniam similique ad earum omnis ipsum saepe, voluptas, hic voluptates pariatur est explicabo fugiat, dolorum eligendi quam cupiditate excepturi mollitia maiores labore suscipit quas? Nulla, placeat. Voluptatem quaerat non architecto ab laudantium modi minima sunt esse temporibus sint culpa, recusandae aliquam numquam totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam quasi aliquam eligendi, placeat qui corporis!
+getDummyText();
 ```
 
-- **getRandomCharacters(length)**: Generates a random string of a specified length.
+### getRandomCharacters(length)
+
+Returns a random string with the requested length. This uses `Math.random()` and is not cryptographically secure.
 
 ```javascript
-superbString.getRandomCharacters(10); // MudjZT5ubk
-superbString.getRandomCharacters(20); // >Ww2BKEjeUuKU5_[j1xb
-superbString.getRandomCharacters(30); // u~Wh{WC2z>V}hf<z89MVHh~N8VytcV
+getRandomCharacters(10); // for example, "MudjZT5ubk"
 ```
 
-### Support
+## Validation
 
-Feel free to contribute and make superbstring a better choice.
+```bash
+npm run build
+npm test
+npm audit
+npm pack --dry-run
+```

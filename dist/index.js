@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRandomCharacters = exports.getDummyText = exports.addSuffix = exports.addPrefix = exports.extractNumber = exports.extractText = exports.decodeUri = exports.encodeUri = exports.rotate13Deg = exports.zalgo = exports.alphabetize = exports.paraToSingleLine = exports.truncate = exports.slugify = exports.reverse = exports.duplicate = exports.removeAllSymbols = exports.removeAllSpaces = exports.removeExtraSpaces = exports.base64Decode = exports.compare = exports.base64Enode = exports.joinString = exports.splitString = void 0;
+exports.getRandomCharacters = exports.getDummyText = exports.addSuffix = exports.addPrefix = exports.extractNumber = exports.extractText = exports.decodeUri = exports.encodeUri = exports.rotate13Deg = exports.zalgo = exports.alphabetize = exports.paraToSingleLine = exports.truncate = exports.slugify = exports.reverse = exports.duplicate = exports.removeAllSymbols = exports.removeAllSpaces = exports.removeExtraSpaces = exports.base64Decode = exports.compare = exports.base64Encode = exports.joinString = exports.splitString = void 0;
 /**
  * Splits a string into an array of substrings based on a specified break point and joins them with a newline character.
  *
@@ -30,11 +30,11 @@ exports.joinString = joinString;
  * @param {string} str - The string to be encoded.
  * @returns {string} The encoded string.
  */
-const base64Enode = (str) => {
+const base64Encode = (str) => {
     const encodedStr = btoa(str);
     return encodedStr;
 };
-exports.base64Enode = base64Enode;
+exports.base64Encode = base64Encode;
 /**
  * Compares a string with the Base64 encoded string.
  *
@@ -97,7 +97,7 @@ exports.removeAllSpaces = removeAllSpaces;
  * @returns {string} The modified string with symbols removed.
  */
 const removeAllSymbols = (str) => {
-    const regex = /[0-9/A-Z/a-z/ /]/g;
+    const regex = /[0-9A-Za-z ]/g;
     const letters = str.match(regex);
     const symbolFreeStr = letters ? letters.join("") : "";
     return symbolFreeStr;
@@ -372,7 +372,7 @@ exports.decodeUri = decodeUri;
  * @returns {string} - The extracted alphabetic characters as a single string.
  */
 const extractText = (str) => {
-    const regex = /[A-Z/a-z/ /]/g;
+    const regex = /[A-Za-z ]/g;
     const letters = str.match(regex);
     const extractedText = letters ? letters.join("") : "";
     return extractedText;
@@ -385,7 +385,7 @@ exports.extractText = extractText;
  * @returns {string} - The extracted numbers as a string.
  */
 const extractNumber = (str) => {
-    const regex = /[0-9/ /]/g;
+    const regex = /[0-9 ]/g;
     const nums = str.match(regex);
     const extractedNumber = nums ? nums.join("") : "";
     return extractedNumber;
