@@ -1,6 +1,6 @@
 {
   "name": "superbstring",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Zero-dependency JavaScript and TypeScript string utilities for text cleanup, slugify, Base64, formatting, parsing, and transforms.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
