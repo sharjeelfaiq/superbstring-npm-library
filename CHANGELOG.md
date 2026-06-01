@@ -6,6 +6,8 @@ This project follows the spirit of [Keep a Changelog](https://keepachangelog.com
 
 ## [Unreleased]
 
+## [2.4.0]
+
 ### Added
 
 - Imported compatible case-conversion utilities from `case-string`: `lowerCase`, `upperCase`, `reverseTitleCase`, `invertCase`, `constantCase`, `pascalSnakeCase`, `trainCase`, `dotCase`, `pathCase`, `alternateCase1`, `alternateCase2`, `toggleCase`, `noCase`, and `sentenceCase`.
