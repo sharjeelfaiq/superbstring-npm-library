@@ -10,24 +10,36 @@ test("exports every documented public API", () => {
     "alphabetize",
     "base64Decode",
     "base64Encode",
+    "chunkText",
     "compare",
     "decodeUri",
     "duplicate",
     "encodeUri",
+    "extractCodeBlocks",
+    "extractEmails",
     "extractNumber",
     "extractText",
+    "extractUrls",
     "getDummyText",
     "getRandomCharacters",
     "joinString",
+    "normalizeLineEndings",
+    "normalizeWhitespace",
     "paraToSingleLine",
     "removeAllSpaces",
     "removeAllSymbols",
+    "removeCodeBlocks",
     "removeExtraSpaces",
+    "removeMarkdown",
     "reverse",
     "rotate13Deg",
+    "safeJsonParse",
     "slugify",
+    "splitIntoParagraphs",
     "splitString",
+    "stripHtml",
     "truncate",
+    "truncateWords",
     "zalgo",
   ]);
 });
@@ -164,4 +176,99 @@ test("getRandomCharacters returns requested length from documented character set
   const result = superbString.getRandomCharacters(30);
   assert.equal(result.length, 30);
   assert.match(result, /^[A-Za-z0-9\-!%*~`()\[\]{}<>_]+$/);
+});
+
+test("normalizeWhitespace collapses repeated whitespace and trims", () => {
+  assert.equal(superbString.normalizeWhitespace("  a   b\tc\n d  "), "a b c d");
+  assert.equal(superbString.normalizeWhitespace("\n\t"), "");
+  assert.equal(superbString.normalizeWhitespace(""), "");
+});
+
+test("normalizeLineEndings converts mixed line endings", () => {
+  assert.equal(superbString.normalizeLineEndings("a\r\nb\rc\nd"), "a\nb\nc\nd");
+  assert.equal(superbString.normalizeLineEndings("a\nb", "\r\n"), "a\r\nb");
+  assert.equal(superbString.normalizeLineEndings(""), "");
+});
+
+test("stripHtml removes tags, comments, and attributes", () => {
+  assert.equal(superbString.stripHtml("<p>Hello <strong>world</strong></p>"), "Hello world");
+  assert.equal(superbString.stripHtml('<a href="https://example.com">Link</a><!-- note -->'), "Link");
+  assert.equal(superbString.stripHtml("plain text"), "plain text");
+  assert.equal(superbString.stripHtml("2 < 3 and <broken"), "2 < 3 and <broken");
+});
+
+test("removeMarkdown removes common lightweight markdown syntax", () => {
+  assert.equal(
+    superbString.removeMarkdown("# Title\n- **Hello** _world_ [site](https://example.com) `code`\n> quote"),
+    "Title\nHello world site code\nquote"
+  );
+  assert.equal(superbString.removeMarkdown("plain text"), "plain text");
+});
+
+test("extractUrls returns http and https URLs without trailing punctuation", () => {
+  assert.deepEqual(superbString.extractUrls("See https://example.com, then http://a.test/path?q=1."), [
+    "https://example.com",
+    "http://a.test/path?q=1",
+  ]);
+  assert.deepEqual(superbString.extractUrls("no url"), []);
+});
+
+test("extractEmails returns valid email-looking addresses", () => {
+  assert.deepEqual(superbString.extractEmails("Mail a+b@example.co.uk and user@test.io."), [
+    "a+b@example.co.uk",
+    "user@test.io",
+  ]);
+  assert.deepEqual(superbString.extractEmails("bad @example and a@b"), []);
+});
+
+test("truncateWords limits text by word count and appends suffix", () => {
+  assert.equal(superbString.truncateWords("one two three", 5), "one two three");
+  assert.equal(superbString.truncateWords("one two three", 3), "one two three");
+  assert.equal(superbString.truncateWords("one two three", 2), "one two...");
+  assert.equal(superbString.truncateWords("one two three", 0), "...");
+  assert.equal(superbString.truncateWords("one two three", 2, " [more]"), "one two [more]");
+});
+
+test("splitIntoParagraphs returns trimmed non-empty paragraphs", () => {
+  assert.deepEqual(superbString.splitIntoParagraphs(" first\r\n\r\nsecond\n\n\n third "), [
+    "first",
+    "second",
+    "third",
+  ]);
+  assert.deepEqual(superbString.splitIntoParagraphs(" \n\t "), []);
+});
+
+test("chunkText chunks by character length and prefers whitespace boundaries", () => {
+  assert.deepEqual(superbString.chunkText("short", 10), ["short"]);
+  assert.deepEqual(superbString.chunkText("one two three four", 7), ["one two", "three", "four"]);
+  assert.deepEqual(superbString.chunkText("abcdefghij", 4), ["abcd", "efgh", "ij"]);
+  assert.deepEqual(superbString.chunkText("abcdef", 4, 2), ["abcd", "cdef"]);
+  assert.deepEqual(superbString.chunkText("abc", 0), []);
+  assert.deepEqual(superbString.chunkText("abcdef", 4, 10), ["abcd", "bcde", "cdef"]);
+});
+
+test("extractCodeBlocks returns fenced markdown code blocks", () => {
+  assert.deepEqual(
+    superbString.extractCodeBlocks("```js\nconsole.log(1);\n```\ntext\n```\nraw\n```"),
+    [
+      { language: "js", code: "console.log(1);" },
+      { language: "", code: "raw" },
+    ]
+  );
+  assert.deepEqual(superbString.extractCodeBlocks("no blocks"), []);
+});
+
+test("removeCodeBlocks removes fenced markdown code and keeps prose", () => {
+  assert.equal(
+    superbString.removeCodeBlocks("before\n```js\nconsole.log(1);\n```\nafter\n```\nraw\n```"),
+    "before\nafter"
+  );
+});
+
+test("safeJsonParse returns parsed JSON or fallback without throwing", () => {
+  assert.deepEqual(superbString.safeJsonParse('{"ok":true}'), { ok: true });
+  assert.deepEqual(superbString.safeJsonParse("[1,2]"), [1, 2]);
+  assert.equal(superbString.safeJsonParse("true"), true);
+  assert.equal(superbString.safeJsonParse("{bad"), null);
+  assert.equal(superbString.safeJsonParse("{bad", "fallback"), "fallback");
 });

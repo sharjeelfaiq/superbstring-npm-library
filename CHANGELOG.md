@@ -10,6 +10,22 @@ This project follows the spirit of [Keep a Changelog](https://keepachangelog.com
 
 - Future changes will be listed here before release.
 
+## [2.2.0]
+
+### Added
+
+- Added lightweight AI, LLM, and RAG text-processing utilities.
+- Added text normalization utilities: `normalizeWhitespace` and `normalizeLineEndings`.
+- Added content cleanup utilities: `stripHtml`, `removeMarkdown`, and `removeCodeBlocks`.
+- Added structured extraction utilities: `extractUrls`, `extractEmails`, and `extractCodeBlocks`.
+- Added context preparation utilities: `splitIntoParagraphs`, `chunkText`, and `truncateWords`.
+- Added `safeJsonParse` for JSON parsing without throwing.
+
+### Compatibility
+
+- No breaking changes.
+- No runtime dependencies added.
+
 ## [2.1.4]
 
 ### Changed

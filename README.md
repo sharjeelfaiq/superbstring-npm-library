@@ -15,6 +15,7 @@ SuperbString is a zero-dependency JavaScript and TypeScript string utilities pac
 - TypeScript support with bundled declarations
 - CommonJS support for Node.js projects
 - Text cleanup utilities for whitespace normalization and symbol removal
+- AI, LLM, and RAG helpers for prompt cleanup and context preparation
 - Encoding helpers for Base64 and URI encoding
 - Formatting helpers for slugs, truncation, prefixes, suffixes, and ROT13
 - String extraction helpers for text and numbers
@@ -50,6 +51,58 @@ console.log(superbString.slugify("Hello, World!")); // "hello-world"
 console.log(superbString.truncate("Big Cat lives in the Jungle", 13)); // "Big Cat lives"
 ```
 
+RAG preprocessing:
+
+```javascript
+const { stripHtml, removeMarkdown, chunkText } = require("superbstring");
+
+const plainText = removeMarkdown(stripHtml("<article># Intro\nUseful context.</article>"));
+const chunks = chunkText(plainText, 500);
+
+console.log(chunks); // ["Intro\nUseful context."]
+```
+
+## AI & LLM Text Utilities
+
+SuperbString includes lightweight helpers for prompt cleanup, RAG preprocessing, context preparation, structured extraction, and LLM output handling. These utilities do not call any model APIs, make network requests, or add tokenizer dependencies.
+
+### Text Normalization
+
+| Function | Purpose |
+| --- | --- |
+| `normalizeWhitespace` | Collapse repeated whitespace and trim text |
+| `normalizeLineEndings` | Convert CRLF, CR, and LF to a consistent newline style |
+
+### Content Cleanup
+
+| Function | Purpose |
+| --- | --- |
+| `stripHtml` | Remove HTML comments and tags |
+| `removeMarkdown` | Remove common Markdown syntax |
+| `removeCodeBlocks` | Remove triple-backtick fenced code blocks |
+
+### RAG Preparation
+
+| Function | Purpose |
+| --- | --- |
+| `splitIntoParagraphs` | Split text into trimmed, non-empty paragraphs |
+| `chunkText` | Split text into character-length chunks |
+| `truncateWords` | Limit text by word count |
+
+### Structured Extraction
+
+| Function | Purpose |
+| --- | --- |
+| `extractUrls` | Extract HTTP and HTTPS URLs |
+| `extractEmails` | Extract email-looking addresses |
+| `extractCodeBlocks` | Extract triple-backtick fenced code blocks |
+
+### LLM Output Handling
+
+| Function | Purpose |
+| --- | --- |
+| `safeJsonParse` | Parse JSON without throwing |
+
 ## String Utilities
 
 Use these JavaScript string utilities for common string manipulation tasks.
@@ -70,12 +123,18 @@ Use these TypeScript string utilities for text processing, text cleanup, and par
 
 | Function | Purpose |
 | --- | --- |
+| `normalizeWhitespace` | Collapse repeated whitespace and trim text |
+| `normalizeLineEndings` | Normalize CRLF, CR, and LF line endings |
+| `stripHtml` | Remove HTML comments and tags |
+| `removeMarkdown` | Remove common Markdown syntax |
 | `removeExtraSpaces` | Normalize whitespace and remove spaces before punctuation |
 | `removeAllSpaces` | Remove all whitespace |
 | `removeAllSymbols` | Keep alphanumeric characters and spaces |
 | `paraToSingleLine` | Collapse whitespace into one line |
 | `extractText` | Keep letters and spaces only |
 | `extractNumber` | Keep digits and spaces only |
+| `extractUrls` | Extract HTTP and HTTPS URLs |
+| `extractEmails` | Extract email-looking addresses |
 | `getDummyText` | Return placeholder text |
 
 ## Encoding Utilities
@@ -187,6 +246,47 @@ removeAllSymbols("Hello, World!"); // "Hello World"
 removeAllSymbols("abc/123_$"); // "abc123"
 ```
 
+### normalizeWhitespace(string)
+
+Collapses repeated whitespace into single spaces and trims the result.
+
+```javascript
+const { normalizeWhitespace } = require("superbstring");
+
+normalizeWhitespace("  a   b\tc\n "); // "a b c"
+```
+
+### normalizeLineEndings(string, newline = "\n")
+
+Converts CRLF, CR, and LF line endings to `"\n"` or `"\r\n"`.
+
+```javascript
+const { normalizeLineEndings } = require("superbstring");
+
+normalizeLineEndings("a\r\nb\rc"); // "a\nb\nc"
+normalizeLineEndings("a\nb", "\r\n"); // "a\r\nb"
+```
+
+### stripHtml(string)
+
+Removes HTML comments and tags. This is tag removal for text cleanup, not a browser security sanitizer.
+
+```javascript
+const { stripHtml } = require("superbstring");
+
+stripHtml('<p>Hello <strong>world</strong></p>'); // "Hello world"
+```
+
+### removeMarkdown(string)
+
+Removes common Markdown markers while keeping readable text. This is lightweight cleanup, not a full Markdown parser.
+
+```javascript
+const { removeMarkdown } = require("superbstring");
+
+removeMarkdown("## Hi\n**bold** [site](https://example.com)"); // "Hi\nbold site"
+```
+
 ### duplicate(string, count = 2)
 
 Repeats a string. Invalid counts use the native `String.prototype.repeat` behavior.
@@ -227,6 +327,16 @@ const { truncate } = require("superbstring");
 truncate("Big Cat lives in the Jungle", 13); // "Big Cat lives"
 ```
 
+### truncateWords(string, maxWords, suffix = "...")
+
+Limits text by word count and appends a suffix only when truncation occurs.
+
+```javascript
+const { truncateWords } = require("superbstring");
+
+truncateWords("one two three", 2); // "one two..."
+```
+
 ### paraToSingleLine(string)
 
 Collapses whitespace into single spaces.
@@ -236,6 +346,26 @@ const { paraToSingleLine } = require("superbstring");
 
 paraToSingleLine("Why so serious?\nLet's smile.");
 // "Why so serious? Let's smile."
+```
+
+### splitIntoParagraphs(string)
+
+Splits text on blank lines and returns trimmed, non-empty paragraphs.
+
+```javascript
+const { splitIntoParagraphs } = require("superbstring");
+
+splitIntoParagraphs("First\n\nSecond"); // ["First", "Second"]
+```
+
+### chunkText(string, maxLength, overlap = 0)
+
+Splits text into character-length chunks, preferring whitespace breaks when no overlap is requested.
+
+```javascript
+const { chunkText } = require("superbstring");
+
+chunkText("one two three four", 7); // ["one two", "three", "four"]
 ```
 
 ### alphabetize(string)
@@ -313,6 +443,59 @@ extractNumber("4 apples, 3 oranges, 1 banana, 2 pears");
 extractNumber("abc/123_$"); // "123"
 ```
 
+### extractUrls(string)
+
+Extracts HTTP and HTTPS URLs and trims common trailing punctuation.
+
+```javascript
+const { extractUrls } = require("superbstring");
+
+extractUrls("Visit https://example.com."); // ["https://example.com"]
+```
+
+### extractEmails(string)
+
+Extracts email-looking addresses.
+
+```javascript
+const { extractEmails } = require("superbstring");
+
+extractEmails("Email a+b@example.co.uk"); // ["a+b@example.co.uk"]
+```
+
+### extractCodeBlocks(string)
+
+Extracts triple-backtick fenced Markdown code blocks as `{ language, code }` objects.
+
+```javascript
+const { extractCodeBlocks } = require("superbstring");
+
+extractCodeBlocks("```js\nconsole.log(1);\n```");
+// [{ language: "js", code: "console.log(1);" }]
+```
+
+### removeCodeBlocks(string)
+
+Removes triple-backtick fenced Markdown code blocks and preserves surrounding prose.
+
+```javascript
+const { removeCodeBlocks } = require("superbstring");
+
+removeCodeBlocks("before\n```js\nconsole.log(1);\n```\nafter");
+// "before\nafter"
+```
+
+### safeJsonParse(string, fallback = null)
+
+Parses JSON without throwing. Invalid JSON returns `fallback`, or `null` when no fallback is provided.
+
+```javascript
+const { safeJsonParse } = require("superbstring");
+
+safeJsonParse('{"ok":true}'); // { ok: true }
+safeJsonParse("{bad", {}); // {}
+```
+
 ### addPrefix(string, prefix)
 
 Adds a prefix.
@@ -360,17 +543,22 @@ getRandomCharacters(10); // for example, "MudjZT5ubk"
 - `encodeUri` uses JavaScript's `encodeURI`, not `encodeURIComponent`.
 - `decodeUri` uses JavaScript's `decodeURI` and malformed input throws `URIError`.
 - `base64Encode`, `base64Decode`, and `compare` rely on platform `btoa` and `atob` APIs.
+- `chunkText` is character-length based, not token based.
+- `removeMarkdown` is lightweight cleanup, not a full Markdown parser.
+- `stripHtml` removes tags for text cleanup and is not a sanitizer for browser security.
+- `safeJsonParse` does not repair invalid JSON.
 
 ## TypeScript Support
 
 SuperbString includes generated TypeScript declaration files through the package `types` field. Named imports work in TypeScript projects:
 
 ```typescript
-import { slugify, truncate, extractNumber } from "superbstring";
+import { slugify, truncate, extractNumber, chunkText } from "superbstring";
 
 const slug: string = slugify("Hello, World!");
 const summary: string = truncate("Big Cat lives in the Jungle", 13);
 const numbers: string = extractNumber("Order #123");
+const chunks: string[] = chunkText("context for retrieval", 500);
 ```
 
 ## Why SuperbString

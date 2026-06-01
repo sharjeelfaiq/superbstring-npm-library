@@ -102,6 +102,94 @@ export const removeAllSymbols = (str: string) => {
 };
 
 /**
+ * Collapses repeated whitespace into single spaces and trims the result.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The normalized string.
+ */
+export const normalizeWhitespace = (str: string) => {
+  const normalizedStr = str.replace(/\s+/g, " ").trim();
+  return normalizedStr;
+};
+
+/**
+ * Converts CRLF and CR line endings to the requested newline style.
+ *
+ * @param {string} str - The input string.
+ * @param {"\n" | "\r\n"} [newline="\n"] - The newline style to use.
+ * @returns {string} The string with normalized line endings.
+ */
+export const normalizeLineEndings = (
+  str: string,
+  newline: "\n" | "\r\n" = "\n"
+) => {
+  const normalizedStr = str.replace(/\r\n|\r|\n/g, "\n").replace(/\n/g, newline);
+  return normalizedStr;
+};
+
+/**
+ * Removes HTML comments and tags from a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The text with HTML tags removed.
+ */
+export const stripHtml = (str: string) => {
+  const htmlFreeStr = str.replace(/<!--[\s\S]*?-->|<\/?[A-Za-z][^>]*>/g, "");
+  return htmlFreeStr;
+};
+
+/**
+ * Removes common Markdown syntax while keeping readable text.
+ *
+ * @param {string} str - The Markdown string.
+ * @returns {string} The string with common Markdown markers removed.
+ */
+export const removeMarkdown = (str: string) => {
+  const markdownFreeStr = str
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s*>\s?/gm, "")
+    .replace(/^\s*(?:[-*+]|\d+\.)\s+/gm, "")
+    .replace(/(\*\*|__)(.*?)\1/g, "$2")
+    .replace(/(\*|_)(.*?)\1/g, "$2")
+    .replace(/~~(.*?)~~/g, "$1")
+    .replace(/^\s*[-*_]{3,}\s*$/gm, "")
+    .replace(/[ \t]+\n/g, "\n")
+    .trim();
+  return markdownFreeStr;
+};
+
+const trimTrailingUrlPunctuation = (url: string) => {
+  return url.replace(/[.,!?;:]+$/g, "").replace(/\)+$/g, (closingParens) => {
+    return closingParens.length > (url.match(/\(/g) || []).length ? "" : closingParens;
+  });
+};
+
+/**
+ * Extracts HTTP and HTTPS URLs from a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {string[]} A list of URLs.
+ */
+export const extractUrls = (str: string) => {
+  const urls = str.match(/https?:\/\/[^\s<>"']+/g) || [];
+  return urls.map(trimTrailingUrlPunctuation);
+};
+
+/**
+ * Extracts email-looking addresses from a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {string[]} A list of email addresses.
+ */
+export const extractEmails = (str: string) => {
+  const emails = str.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi) || [];
+  return emails;
+};
+
+/**
  * Duplicates a given string a specified number of times.
  *
  * @param {string} str - The string to be duplicated.
@@ -150,6 +238,33 @@ export const truncate = (str: string, length: number) => {
 };
 
 /**
+ * Truncates a string to a maximum number of words.
+ *
+ * @param {string} str - The string to truncate.
+ * @param {number} maxWords - The maximum number of words to keep.
+ * @param {string} [suffix="..."] - The suffix appended when text is truncated.
+ * @returns {string} The word-limited string.
+ */
+export const truncateWords = (
+  str: string,
+  maxWords: number,
+  suffix: string = "..."
+) => {
+  const words = str.trim().match(/\S+/g) || [];
+
+  if (maxWords <= 0) {
+    return words.length > 0 ? suffix : "";
+  }
+
+  if (words.length <= maxWords) {
+    return words.join(" ");
+  }
+
+  const truncatedStr = words.slice(0, maxWords).join(" ") + suffix;
+  return truncatedStr;
+};
+
+/**
  * Converts a paragraph to a single line by removing extra whitespace.
  *
  * @param {string} str - The paragraph to be converted.
@@ -158,6 +273,80 @@ export const truncate = (str: string, length: number) => {
 export const paraToSingleLine = (str: string) => {
   const singleLine = str.replace(/\s+/g, " ");
   return singleLine;
+};
+
+/**
+ * Splits text into trimmed, non-empty paragraphs.
+ *
+ * @param {string} str - The input text.
+ * @returns {string[]} Paragraphs from the text.
+ */
+export const splitIntoParagraphs = (str: string) => {
+  const paragraphs = normalizeLineEndings(str)
+    .split(/\n\s*\n/g)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length > 0);
+  return paragraphs;
+};
+
+/**
+ * Splits text into character-length chunks, preferring whitespace breaks.
+ *
+ * @param {string} str - The input text.
+ * @param {number} maxLength - Maximum chunk length.
+ * @param {number} [overlap=0] - Number of characters to overlap between chunks.
+ * @returns {string[]} Text chunks.
+ */
+export const chunkText = (
+  str: string,
+  maxLength: number,
+  overlap: number = 0
+) => {
+  if (maxLength <= 0 || str.length === 0) {
+    return [];
+  }
+
+  const safeOverlap = Math.max(0, Math.min(overlap, maxLength - 1));
+  const chunks: string[] = [];
+
+  if (safeOverlap > 0) {
+    const step = maxLength - safeOverlap;
+    for (let index = 0; index < str.length; index += step) {
+      const chunk = str.slice(index, index + maxLength).trim();
+      if (chunk.length > 0) {
+        chunks.push(chunk);
+      }
+      if (index + maxLength >= str.length) {
+        break;
+      }
+    }
+    return chunks;
+  }
+
+  let remaining = str.trim();
+  while (remaining.length > 0) {
+    if (remaining.length <= maxLength) {
+      chunks.push(remaining);
+      break;
+    }
+
+    let splitAt = maxLength;
+    const nextChar = remaining.charAt(maxLength);
+    if (!/\s/.test(nextChar)) {
+      const whitespaceIndex = remaining.slice(0, maxLength + 1).search(/\s+\S*$/);
+      if (whitespaceIndex > 0) {
+        splitAt = whitespaceIndex;
+      }
+    }
+
+    const chunk = remaining.slice(0, splitAt).trim();
+    if (chunk.length > 0) {
+      chunks.push(chunk);
+    }
+    remaining = remaining.slice(splitAt).trim();
+  }
+
+  return chunks;
 };
 
 /**
@@ -448,4 +637,64 @@ export const getRandomCharacters = (length: number) => {
   }
 
   return randomCharacters;
+};
+
+export type CodeBlock = {
+  language: string;
+  code: string;
+};
+
+/**
+ * Extracts triple-backtick fenced Markdown code blocks.
+ *
+ * @param {string} str - The Markdown string.
+ * @returns {CodeBlock[]} Extracted code blocks.
+ */
+export const extractCodeBlocks = (str: string) => {
+  const blocks: CodeBlock[] = [];
+  const codeBlockRegex = /```([^\r\n`]*)\r?\n([\s\S]*?)```/g;
+  let match = codeBlockRegex.exec(str);
+
+  while (match) {
+    blocks.push({
+      language: match[1].trim(),
+      code: match[2].replace(/^\r?\n|\r?\n$/g, ""),
+    });
+    match = codeBlockRegex.exec(str);
+  }
+
+  return blocks;
+};
+
+/**
+ * Removes triple-backtick fenced Markdown code blocks.
+ *
+ * @param {string} str - The Markdown string.
+ * @returns {string} The string with code blocks removed.
+ */
+export const removeCodeBlocks = (str: string) => {
+  const codeFreeStr = str
+    .replace(/```[^\r\n`]*\r?\n[\s\S]*?```/g, "")
+    .replace(/\n{2,}/g, "\n")
+    .trim();
+  return codeFreeStr;
+};
+
+/**
+ * Parses JSON without throwing.
+ *
+ * @param {string} str - The JSON string to parse.
+ * @param {unknown} [fallback=null] - The value returned when parsing fails.
+ * @returns {unknown} Parsed JSON or the fallback value.
+ */
+export const safeJsonParse = <T = unknown>(
+  str: string,
+  fallback?: T
+): unknown | T => {
+  try {
+    const parsedJson = JSON.parse(str);
+    return parsedJson;
+  } catch (error) {
+    return fallback === undefined ? null : fallback;
+  }
 };
