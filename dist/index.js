@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRandomCharacters = exports.getDummyText = exports.addSuffix = exports.addPrefix = exports.extractNumber = exports.extractText = exports.decodeUri = exports.encodeUri = exports.rotate13Deg = exports.zalgo = exports.alphabetize = exports.paraToSingleLine = exports.truncate = exports.slugify = exports.reverse = exports.duplicate = exports.removeAllSymbols = exports.removeAllSpaces = exports.removeExtraSpaces = exports.base64Decode = exports.compare = exports.base64Encode = exports.joinString = exports.splitString = void 0;
 /**
- * Splits a string into an array of substrings based on a specified break point and joins them with a newline character.
+ * Replaces delimiter occurrences in a string with newline characters.
  *
  * @param {string} str - The string to be split.
- * @param {string} [breakPoint=" "] - The break point at which to split the string. Defaults to a space character.
- * @returns {string} The string with substrings split at the break point and joined with a newline character.
+ * @param {string} [delimiter=" "] - The delimiter to replace. Defaults to a space character.
+ * @returns {string} The string with delimiter occurrences replaced by newline characters.
  */
 const splitString = (str, delimiter = " ") => {
     const splittedString = str.split(delimiter).join("\n");
@@ -25,7 +25,7 @@ const joinString = (str) => {
 };
 exports.joinString = joinString;
 /**
- * Encrypts a string using Base64 encoding.
+ * Encodes a string using Base64 encoding.
  *
  * @param {string} str - The string to be encoded.
  * @returns {string} The encoded string.
@@ -56,10 +56,10 @@ const compare = (str, encodedStr) => {
 };
 exports.compare = compare;
 /**
- * Decode a base64-encoded password.
+ * Decodes a Base64-encoded string.
  *
- * @param {string} encodedStr - The base64-encoded password to decrypt.
- * @returns {string} The decoded password.
+ * @param {string} encodedStr - The Base64-encoded string to decode.
+ * @returns {string} The decoded string.
  */
 const base64Decode = (encodedStr) => {
     const decodedStr = atob(encodedStr);
@@ -181,7 +181,7 @@ const alphabetize = (str) => {
 exports.alphabetize = alphabetize;
 /**
  * Generates a zalgo text by adding random diacritic characters to each character in the input string.
- * @param {string} text - The input string.
+ * @param {string} str - The input string.
  * @returns {string} The zalgo text generated from the input string.
  */
 const zalgo = (str) => {
@@ -427,7 +427,7 @@ exports.getDummyText = getDummyText;
 /**
  * Generates a random string of characters.
  *
- * @param {number} limit - The length of the random string to generate.
+ * @param {number} length - The length of the random string to generate.
  * @returns {string} The randomly generated string.
  */
 const getRandomCharacters = (length) => {

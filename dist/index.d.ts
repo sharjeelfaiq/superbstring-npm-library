@@ -1,9 +1,9 @@
 /**
- * Splits a string into an array of substrings based on a specified break point and joins them with a newline character.
+ * Replaces delimiter occurrences in a string with newline characters.
  *
  * @param {string} str - The string to be split.
- * @param {string} [breakPoint=" "] - The break point at which to split the string. Defaults to a space character.
- * @returns {string} The string with substrings split at the break point and joined with a newline character.
+ * @param {string} [delimiter=" "] - The delimiter to replace. Defaults to a space character.
+ * @returns {string} The string with delimiter occurrences replaced by newline characters.
  */
 export declare const splitString: (str: string, delimiter?: string) => string;
 /**
@@ -14,7 +14,7 @@ export declare const splitString: (str: string, delimiter?: string) => string;
  */
 export declare const joinString: (str: string) => string;
 /**
- * Encrypts a string using Base64 encoding.
+ * Encodes a string using Base64 encoding.
  *
  * @param {string} str - The string to be encoded.
  * @returns {string} The encoded string.
@@ -29,10 +29,10 @@ export declare const base64Encode: (str: string) => string;
  */
 export declare const compare: (str: string, encodedStr: string) => boolean;
 /**
- * Decode a base64-encoded password.
+ * Decodes a Base64-encoded string.
  *
- * @param {string} encodedStr - The base64-encoded password to decrypt.
- * @returns {string} The decoded password.
+ * @param {string} encodedStr - The Base64-encoded string to decode.
+ * @returns {string} The decoded string.
  */
 export declare const base64Decode: (encodedStr: string) => string;
 /**
@@ -100,7 +100,7 @@ export declare const paraToSingleLine: (str: string) => string;
 export declare const alphabetize: (str: string) => string;
 /**
  * Generates a zalgo text by adding random diacritic characters to each character in the input string.
- * @param {string} text - The input string.
+ * @param {string} str - The input string.
  * @returns {string} The zalgo text generated from the input string.
  */
 export declare const zalgo: (str: string) => string;
@@ -164,7 +164,7 @@ export declare const getDummyText: () => string;
 /**
  * Generates a random string of characters.
  *
- * @param {number} limit - The length of the random string to generate.
+ * @param {number} length - The length of the random string to generate.
  * @returns {string} The randomly generated string.
  */
 export declare const getRandomCharacters: (length: number) => string;
