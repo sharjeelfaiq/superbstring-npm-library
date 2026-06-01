@@ -114,6 +114,14 @@ const capitalizeAsciiWord = (word: string) => {
   return lowerWord.charAt(0).toUpperCase() + lowerWord.slice(1);
 };
 
+const joinWords = (
+  str: string,
+  transform: (word: string) => string,
+  separator: string
+) => {
+  return getAsciiWords(str).map(transform).join(separator);
+};
+
 /**
  * Converts a string to camelCase using ASCII word boundaries.
  *
@@ -177,6 +185,181 @@ export const titleCase = (str: string) => {
  */
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+/**
+ * Converts a string to lowercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The lowercase string.
+ */
+export const lowerCase = (str: string) => {
+  return str.toLowerCase();
+};
+
+/**
+ * Converts a string to uppercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The uppercase string.
+ */
+export const upperCase = (str: string) => {
+  return str.toUpperCase();
+};
+
+/**
+ * Converts a string to CONSTANT_CASE using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The CONSTANT_CASE string.
+ */
+export const constantCase = (str: string) => {
+  return joinWords(str, (word) => word.toUpperCase(), "_");
+};
+
+/**
+ * Converts a string to Pascal_Snake_Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Pascal_Snake_Case string.
+ */
+export const pascalSnakeCase = (str: string) => {
+  return joinWords(str, capitalizeAsciiWord, "_");
+};
+
+/**
+ * Converts a string to Train-Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Train-Case string.
+ */
+export const trainCase = (str: string) => {
+  return joinWords(str, capitalizeAsciiWord, "-");
+};
+
+/**
+ * Converts a string to dot.case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The dot.case string.
+ */
+export const dotCase = (str: string) => {
+  return joinWords(str, lowerAsciiWord, ".");
+};
+
+/**
+ * Converts a string to path/case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The path/case string.
+ */
+export const pathCase = (str: string) => {
+  return joinWords(str, lowerAsciiWord, "/");
+};
+
+/**
+ * Inverts uppercase and lowercase characters.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The inverted-case string.
+ */
+export const invertCase = (str: string) => {
+  return Array.from(str)
+    .map((char) => {
+      const upper = char.toUpperCase();
+      const lower = char.toLowerCase();
+
+      if (char === upper && char !== lower) {
+        return lower;
+      }
+
+      if (char === lower && char !== upper) {
+        return upper;
+      }
+
+      return char;
+    })
+    .join("");
+};
+
+/**
+ * Lowercases words and uppercases the final character of each word.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The reverse title case string.
+ */
+export const reverseTitleCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map((word) => {
+      return word.slice(0, -1) + word.slice(-1).toUpperCase();
+    })
+    .join(" ");
+};
+
+/**
+ * Alternates character casing starting with uppercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The alternating-case string.
+ */
+export const alternateCase1 = (str: string) => {
+  return Array.from(str.toLowerCase())
+    .map((char, index) => (index % 2 === 0 ? char.toUpperCase() : char))
+    .join("");
+};
+
+/**
+ * Alternates character casing starting with lowercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The alternating-case string.
+ */
+export const alternateCase2 = (str: string) => {
+  return Array.from(str.toUpperCase())
+    .map((char, index) => (index % 2 === 0 ? char.toLowerCase() : char))
+    .join("");
+};
+
+/**
+ * Uppercases each word and lowercases its first character.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The toggled-case string.
+ */
+export const toggleCase = (str: string) => {
+  return str
+    .toUpperCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toLowerCase() + word.slice(1))
+    .join(" ");
+};
+
+/**
+ * Converts common separated and camelCase input to lowercase words.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The no-case string.
+ */
+export const noCase = (str: string) => {
+  return str
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/[\W_]+/g, " ")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+};
+
+/**
+ * Converts basic sentences to sentence case.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The sentence-cased string.
+ */
+export const sentenceCase = (str: string) => {
+  const lower = str.toLowerCase();
+  return lower.replace(/(^\s*\w|[.!?]\s*\w)/g, (match) => match.toUpperCase());
 };
 
 /**

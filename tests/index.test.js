@@ -10,6 +10,8 @@ test("exports every documented public API", () => {
     "addPrefix",
     "addSuffix",
     "alphabetize",
+    "alternateCase1",
+    "alternateCase2",
     "base64Decode",
     "base64Encode",
     "camelCase",
@@ -17,7 +19,9 @@ test("exports every documented public API", () => {
     "charCount",
     "chunkText",
     "compare",
+    "constantCase",
     "decodeUri",
+    "dotCase",
     "duplicate",
     "encodeUri",
     "extractCodeBlocks",
@@ -27,14 +31,19 @@ test("exports every documented public API", () => {
     "extractUrls",
     "getDummyText",
     "getRandomCharacters",
+    "invertCase",
     "isSlug",
     "joinString",
     "kebabCase",
+    "lowerCase",
+    "noCase",
     "normalizeLineEndings",
     "normalizeUnicode",
     "normalizeWhitespace",
     "paraToSingleLine",
     "pascalCase",
+    "pascalSnakeCase",
+    "pathCase",
     "removeAllSpaces",
     "removeAllSymbols",
     "removeCodeBlocks",
@@ -42,8 +51,10 @@ test("exports every documented public API", () => {
     "removeExtraSpaces",
     "removeMarkdown",
     "reverse",
+    "reverseTitleCase",
     "rotate13Deg",
     "safeJsonParse",
+    "sentenceCase",
     "sentenceCount",
     "slugify",
     "snakeCase",
@@ -51,8 +62,11 @@ test("exports every documented public API", () => {
     "splitString",
     "stripHtml",
     "titleCase",
+    "toggleCase",
+    "trainCase",
     "truncate",
     "truncateWords",
+    "upperCase",
     "wordCount",
     "zalgo",
   ]);
@@ -146,6 +160,49 @@ test("case conversion helpers handle spaces, separators, numbers, and empty stri
   assert.equal(superbString.capitalize("hello world"), "Hello world");
   assert.equal(superbString.capitalize("h"), "H");
   assert.equal(superbString.capitalize(""), "");
+});
+
+test("case-string migration helpers convert predictable text cases", () => {
+  assert.equal(superbString.lowerCase("Hello WORLD 123!"), "hello world 123!");
+  assert.equal(superbString.upperCase("Hello world 123!"), "HELLO WORLD 123!");
+  assert.equal(superbString.lowerCase(""), "");
+  assert.equal(superbString.upperCase(""), "");
+
+  assert.equal(superbString.constantCase("User profile-title_42"), "USER_PROFILE_TITLE_42");
+  assert.equal(superbString.pascalSnakeCase("User profile-title_42"), "User_Profile_Title_42");
+  assert.equal(superbString.trainCase("user profile-title_42"), "User-Profile-Title-42");
+  assert.equal(superbString.dotCase("User profile-title_42"), "user.profile.title.42");
+  assert.equal(superbString.pathCase("User profile-title_42"), "user/profile/title/42");
+  assert.equal(superbString.constantCase(""), "");
+  assert.equal(superbString.pascalSnakeCase(""), "");
+  assert.equal(superbString.trainCase(""), "");
+  assert.equal(superbString.dotCase(""), "");
+  assert.equal(superbString.pathCase(""), "");
+});
+
+test("case-string migration helpers transform character casing", () => {
+  assert.equal(superbString.invertCase("AbC 123!"), "aBc 123!");
+  assert.equal(superbString.toggleCase("hello WORLD 123"), "hELLO wORLD 123");
+  assert.equal(superbString.alternateCase1("hello world!"), "HeLlO WoRlD!");
+  assert.equal(superbString.alternateCase2("hello world!"), "hElLo wOrLd!");
+  assert.equal(superbString.reverseTitleCase("The quick brown fox"), "thE quicK browN foX");
+  assert.equal(superbString.invertCase(""), "");
+  assert.equal(superbString.toggleCase(""), "");
+  assert.equal(superbString.alternateCase1(""), "");
+  assert.equal(superbString.alternateCase2(""), "");
+  assert.equal(superbString.reverseTitleCase(""), "");
+});
+
+test("case-string migration helpers normalize existing case styles", () => {
+  assert.equal(superbString.noCase("userProfileTitle"), "user profile title");
+  assert.equal(superbString.noCase("user-profile_title.test"), "user profile title test");
+  assert.equal(superbString.noCase("User Profile Title"), "user profile title");
+  assert.equal(superbString.noCase(""), "");
+
+  assert.equal(superbString.sentenceCase("hELLO WORLD. tHIS is A TEST!"), "Hello world. This is a test!");
+  assert.equal(superbString.sentenceCase("already sentence case."), "Already sentence case.");
+  assert.equal(superbString.sentenceCase("no punctuation here"), "No punctuation here");
+  assert.equal(superbString.sentenceCase(""), "");
 });
 
 test("counting helpers return predictable basic counts", () => {

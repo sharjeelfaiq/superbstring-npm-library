@@ -98,6 +98,104 @@ export declare const titleCase: (str: string) => string;
  */
 export declare const capitalize: (str: string) => string;
 /**
+ * Converts a string to lowercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The lowercase string.
+ */
+export declare const lowerCase: (str: string) => string;
+/**
+ * Converts a string to uppercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The uppercase string.
+ */
+export declare const upperCase: (str: string) => string;
+/**
+ * Converts a string to CONSTANT_CASE using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The CONSTANT_CASE string.
+ */
+export declare const constantCase: (str: string) => string;
+/**
+ * Converts a string to Pascal_Snake_Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Pascal_Snake_Case string.
+ */
+export declare const pascalSnakeCase: (str: string) => string;
+/**
+ * Converts a string to Train-Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Train-Case string.
+ */
+export declare const trainCase: (str: string) => string;
+/**
+ * Converts a string to dot.case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The dot.case string.
+ */
+export declare const dotCase: (str: string) => string;
+/**
+ * Converts a string to path/case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The path/case string.
+ */
+export declare const pathCase: (str: string) => string;
+/**
+ * Inverts uppercase and lowercase characters.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The inverted-case string.
+ */
+export declare const invertCase: (str: string) => string;
+/**
+ * Lowercases words and uppercases the final character of each word.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The reverse title case string.
+ */
+export declare const reverseTitleCase: (str: string) => string;
+/**
+ * Alternates character casing starting with uppercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The alternating-case string.
+ */
+export declare const alternateCase1: (str: string) => string;
+/**
+ * Alternates character casing starting with lowercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The alternating-case string.
+ */
+export declare const alternateCase2: (str: string) => string;
+/**
+ * Uppercases each word and lowercases its first character.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The toggled-case string.
+ */
+export declare const toggleCase: (str: string) => string;
+/**
+ * Converts common separated and camelCase input to lowercase words.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The no-case string.
+ */
+export declare const noCase: (str: string) => string;
+/**
+ * Converts basic sentences to sentence case.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The sentence-cased string.
+ */
+export declare const sentenceCase: (str: string) => string;
+/**
  * Counts ASCII word-like sequences in a string.
  *
  * @param {string} str - The input string.

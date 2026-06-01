@@ -8,6 +8,22 @@ This project follows the spirit of [Keep a Changelog](https://keepachangelog.com
 
 ### Added
 
+- Imported compatible case-conversion utilities from `case-string`: `lowerCase`, `upperCase`, `reverseTitleCase`, `invertCase`, `constantCase`, `pascalSnakeCase`, `trainCase`, `dotCase`, `pathCase`, `alternateCase1`, `alternateCase2`, `toggleCase`, `noCase`, and `sentenceCase`.
+- Added migration-friendly `case-string` API names where they are useful and predictable.
+
+### Changed
+
+- Expanded npm keywords for case-conversion discoverability.
+
+### Compatibility
+
+- No breaking changes.
+- No runtime dependencies added.
+
+## [2.3.0]
+
+### Added
+
 - Added case conversion utilities: `camelCase`, `pascalCase`, `snakeCase`, `kebabCase`, `titleCase`, and `capitalize`.
 - Added counting utilities: `wordCount`, `charCount`, and `sentenceCount`.
 - Added cleanup utilities: `removeDuplicateLines` and `normalizeUnicode`.

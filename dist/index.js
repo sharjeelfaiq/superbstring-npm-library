@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.safeJsonParse = exports.removeCodeBlocks = exports.extractCodeBlocks = exports.getRandomCharacters = exports.getDummyText = exports.addSuffix = exports.addPrefix = exports.extractNumber = exports.extractText = exports.decodeUri = exports.encodeUri = exports.rotate13Deg = exports.zalgo = exports.alphabetize = exports.chunkText = exports.splitIntoParagraphs = exports.paraToSingleLine = exports.truncateWords = exports.truncate = exports.slugify = exports.reverse = exports.duplicate = exports.extractEmails = exports.extractUrls = exports.removeMarkdown = exports.stripHtml = exports.normalizeLineEndings = exports.normalizeWhitespace = exports.isSlug = exports.normalizeUnicode = exports.removeDuplicateLines = exports.sentenceCount = exports.charCount = exports.wordCount = exports.capitalize = exports.titleCase = exports.kebabCase = exports.snakeCase = exports.pascalCase = exports.camelCase = exports.removeAllSymbols = exports.removeAllSpaces = exports.removeExtraSpaces = exports.base64Decode = exports.compare = exports.base64Encode = exports.joinString = exports.splitString = void 0;
+exports.zalgo = exports.alphabetize = exports.chunkText = exports.splitIntoParagraphs = exports.paraToSingleLine = exports.truncateWords = exports.truncate = exports.slugify = exports.reverse = exports.duplicate = exports.extractEmails = exports.extractUrls = exports.removeMarkdown = exports.stripHtml = exports.normalizeLineEndings = exports.normalizeWhitespace = exports.isSlug = exports.normalizeUnicode = exports.removeDuplicateLines = exports.sentenceCount = exports.charCount = exports.wordCount = exports.sentenceCase = exports.noCase = exports.toggleCase = exports.alternateCase2 = exports.alternateCase1 = exports.reverseTitleCase = exports.invertCase = exports.pathCase = exports.dotCase = exports.trainCase = exports.pascalSnakeCase = exports.constantCase = exports.upperCase = exports.lowerCase = exports.capitalize = exports.titleCase = exports.kebabCase = exports.snakeCase = exports.pascalCase = exports.camelCase = exports.removeAllSymbols = exports.removeAllSpaces = exports.removeExtraSpaces = exports.base64Decode = exports.compare = exports.base64Encode = exports.joinString = exports.splitString = void 0;
+exports.safeJsonParse = exports.removeCodeBlocks = exports.extractCodeBlocks = exports.getRandomCharacters = exports.getDummyText = exports.addSuffix = exports.addPrefix = exports.extractNumber = exports.extractText = exports.decodeUri = exports.encodeUri = exports.rotate13Deg = void 0;
 /**
  * Replaces delimiter occurrences in a string with newline characters.
  *
@@ -113,6 +114,9 @@ const capitalizeAsciiWord = (word) => {
     const lowerWord = lowerAsciiWord(word);
     return lowerWord.charAt(0).toUpperCase() + lowerWord.slice(1);
 };
+const joinWords = (str, transform, separator) => {
+    return getAsciiWords(str).map(transform).join(separator);
+};
 /**
  * Converts a string to camelCase using ASCII word boundaries.
  *
@@ -178,6 +182,178 @@ const capitalize = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
 exports.capitalize = capitalize;
+/**
+ * Converts a string to lowercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The lowercase string.
+ */
+const lowerCase = (str) => {
+    return str.toLowerCase();
+};
+exports.lowerCase = lowerCase;
+/**
+ * Converts a string to uppercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The uppercase string.
+ */
+const upperCase = (str) => {
+    return str.toUpperCase();
+};
+exports.upperCase = upperCase;
+/**
+ * Converts a string to CONSTANT_CASE using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The CONSTANT_CASE string.
+ */
+const constantCase = (str) => {
+    return joinWords(str, (word) => word.toUpperCase(), "_");
+};
+exports.constantCase = constantCase;
+/**
+ * Converts a string to Pascal_Snake_Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Pascal_Snake_Case string.
+ */
+const pascalSnakeCase = (str) => {
+    return joinWords(str, capitalizeAsciiWord, "_");
+};
+exports.pascalSnakeCase = pascalSnakeCase;
+/**
+ * Converts a string to Train-Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Train-Case string.
+ */
+const trainCase = (str) => {
+    return joinWords(str, capitalizeAsciiWord, "-");
+};
+exports.trainCase = trainCase;
+/**
+ * Converts a string to dot.case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The dot.case string.
+ */
+const dotCase = (str) => {
+    return joinWords(str, lowerAsciiWord, ".");
+};
+exports.dotCase = dotCase;
+/**
+ * Converts a string to path/case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The path/case string.
+ */
+const pathCase = (str) => {
+    return joinWords(str, lowerAsciiWord, "/");
+};
+exports.pathCase = pathCase;
+/**
+ * Inverts uppercase and lowercase characters.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The inverted-case string.
+ */
+const invertCase = (str) => {
+    return Array.from(str)
+        .map((char) => {
+        const upper = char.toUpperCase();
+        const lower = char.toLowerCase();
+        if (char === upper && char !== lower) {
+            return lower;
+        }
+        if (char === lower && char !== upper) {
+            return upper;
+        }
+        return char;
+    })
+        .join("");
+};
+exports.invertCase = invertCase;
+/**
+ * Lowercases words and uppercases the final character of each word.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The reverse title case string.
+ */
+const reverseTitleCase = (str) => {
+    return str
+        .toLowerCase()
+        .split(" ")
+        .map((word) => {
+        return word.slice(0, -1) + word.slice(-1).toUpperCase();
+    })
+        .join(" ");
+};
+exports.reverseTitleCase = reverseTitleCase;
+/**
+ * Alternates character casing starting with uppercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The alternating-case string.
+ */
+const alternateCase1 = (str) => {
+    return Array.from(str.toLowerCase())
+        .map((char, index) => (index % 2 === 0 ? char.toUpperCase() : char))
+        .join("");
+};
+exports.alternateCase1 = alternateCase1;
+/**
+ * Alternates character casing starting with lowercase.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The alternating-case string.
+ */
+const alternateCase2 = (str) => {
+    return Array.from(str.toUpperCase())
+        .map((char, index) => (index % 2 === 0 ? char.toLowerCase() : char))
+        .join("");
+};
+exports.alternateCase2 = alternateCase2;
+/**
+ * Uppercases each word and lowercases its first character.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The toggled-case string.
+ */
+const toggleCase = (str) => {
+    return str
+        .toUpperCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toLowerCase() + word.slice(1))
+        .join(" ");
+};
+exports.toggleCase = toggleCase;
+/**
+ * Converts common separated and camelCase input to lowercase words.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The no-case string.
+ */
+const noCase = (str) => {
+    return str
+        .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+        .replace(/[\W_]+/g, " ")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+};
+exports.noCase = noCase;
+/**
+ * Converts basic sentences to sentence case.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The sentence-cased string.
+ */
+const sentenceCase = (str) => {
+    const lower = str.toLowerCase();
+    return lower.replace(/(^\s*\w|[.!?]\s*\w)/g, (match) => match.toUpperCase());
+};
+exports.sentenceCase = sentenceCase;
 /**
  * Counts ASCII word-like sequences in a string.
  *

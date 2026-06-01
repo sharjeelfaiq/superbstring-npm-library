@@ -18,6 +18,7 @@ SuperbString is a zero-dependency JavaScript and TypeScript string utilities pac
 - AI, LLM, and RAG helpers for prompt cleanup and context preparation
 - Encoding helpers for Base64 and URI encoding
 - Formatting helpers for slugs, case conversion, truncation, prefixes, suffixes, and ROT13
+- Migration-friendly case utilities for users moving from `case-string`
 - Counting helpers for words, characters, and basic sentences
 - String extraction helpers for text and numbers
 
@@ -127,7 +128,33 @@ SuperbString includes lightweight helpers for prompt cleanup, RAG preprocessing,
 | `kebabCase` | Convert text to kebab-case |
 | `titleCase` | Convert text to Title Case |
 | `capitalize` | Uppercase the first character |
+| `lowerCase` | Convert text to lowercase |
+| `upperCase` | Convert text to uppercase |
+| `constantCase` | Convert text to CONSTANT_CASE |
+| `pascalSnakeCase` | Convert text to Pascal_Snake_Case |
+| `trainCase` | Convert text to Train-Case |
+| `dotCase` | Convert text to dot.case |
+| `pathCase` | Convert text to path/case |
+| `invertCase` | Invert uppercase and lowercase characters |
+| `reverseTitleCase` | Uppercase the final character of each word |
+| `alternateCase1` | Alternate character casing starting uppercase |
+| `alternateCase2` | Alternate character casing starting lowercase |
+| `toggleCase` | Uppercase words and lowercase each first character |
+| `noCase` | Convert common case styles to lowercase words |
+| `sentenceCase` | Convert basic text to sentence case |
 | `isSlug` | Validate lowercase URL slug format |
+
+### Migrating from case-string
+
+SuperbString includes compatible, zero-dependency case-conversion APIs from `case-string` so existing users can move to `superbstring` without keeping both packages installed.
+
+```javascript
+const { constantCase, trainCase, noCase } = require("superbstring");
+
+constantCase("user profile-title"); // "USER_PROFILE_TITLE"
+trainCase("user profile-title"); // "User-Profile-Title"
+noCase("userProfileTitle"); // "user profile title"
+```
 
 ### Counting
 
@@ -201,6 +228,20 @@ Use these helpers for string formatting, slug generation, decoration, and affixe
 | `kebabCase` | Convert text to kebab-case |
 | `titleCase` | Convert text to Title Case |
 | `capitalize` | Uppercase the first character |
+| `lowerCase` | Convert text to lowercase |
+| `upperCase` | Convert text to uppercase |
+| `constantCase` | Convert text to CONSTANT_CASE |
+| `pascalSnakeCase` | Convert text to Pascal_Snake_Case |
+| `trainCase` | Convert text to Train-Case |
+| `dotCase` | Convert text to dot.case |
+| `pathCase` | Convert text to path/case |
+| `invertCase` | Invert uppercase and lowercase characters |
+| `reverseTitleCase` | Uppercase the final character of each word |
+| `alternateCase1` | Alternate character casing starting uppercase |
+| `alternateCase2` | Alternate character casing starting lowercase |
+| `toggleCase` | Uppercase words and lowercase each first character |
+| `noCase` | Convert common case styles to lowercase words |
+| `sentenceCase` | Convert basic text to sentence case |
 | `isSlug` | Validate lowercase URL slug format |
 | `addPrefix` | Add a prefix |
 | `addSuffix` | Add a suffix |
@@ -442,6 +483,146 @@ Uppercases the first character and leaves the rest unchanged.
 const { capitalize } = require("superbstring");
 
 capitalize("hello world"); // "Hello world"
+```
+
+### lowerCase(string)
+
+Converts a string to lowercase.
+
+```javascript
+const { lowerCase } = require("superbstring");
+
+lowerCase("Hello WORLD"); // "hello world"
+```
+
+### upperCase(string)
+
+Converts a string to uppercase.
+
+```javascript
+const { upperCase } = require("superbstring");
+
+upperCase("Hello world"); // "HELLO WORLD"
+```
+
+### constantCase(string)
+
+Converts ASCII word-like sequences to CONSTANT_CASE.
+
+```javascript
+const { constantCase } = require("superbstring");
+
+constantCase("User profile-title"); // "USER_PROFILE_TITLE"
+```
+
+### pascalSnakeCase(string)
+
+Converts ASCII word-like sequences to Pascal_Snake_Case.
+
+```javascript
+const { pascalSnakeCase } = require("superbstring");
+
+pascalSnakeCase("user profile-title"); // "User_Profile_Title"
+```
+
+### trainCase(string)
+
+Converts ASCII word-like sequences to Train-Case.
+
+```javascript
+const { trainCase } = require("superbstring");
+
+trainCase("user profile-title"); // "User-Profile-Title"
+```
+
+### dotCase(string)
+
+Converts ASCII word-like sequences to dot.case.
+
+```javascript
+const { dotCase } = require("superbstring");
+
+dotCase("User profile-title"); // "user.profile.title"
+```
+
+### pathCase(string)
+
+Converts ASCII word-like sequences to path/case.
+
+```javascript
+const { pathCase } = require("superbstring");
+
+pathCase("User profile-title"); // "user/profile/title"
+```
+
+### invertCase(string)
+
+Inverts uppercase and lowercase characters.
+
+```javascript
+const { invertCase } = require("superbstring");
+
+invertCase("AbC 123!"); // "aBc 123!"
+```
+
+### reverseTitleCase(string)
+
+Lowercases words and uppercases the final character of each space-separated word.
+
+```javascript
+const { reverseTitleCase } = require("superbstring");
+
+reverseTitleCase("The quick brown fox"); // "thE quicK browN foX"
+```
+
+### alternateCase1(string)
+
+Alternates character casing starting with uppercase.
+
+```javascript
+const { alternateCase1 } = require("superbstring");
+
+alternateCase1("hello world!"); // "HeLlO WoRlD!"
+```
+
+### alternateCase2(string)
+
+Alternates character casing starting with lowercase.
+
+```javascript
+const { alternateCase2 } = require("superbstring");
+
+alternateCase2("hello world!"); // "hElLo wOrLd!"
+```
+
+### toggleCase(string)
+
+Uppercases each space-separated word and lowercases its first character.
+
+```javascript
+const { toggleCase } = require("superbstring");
+
+toggleCase("hello WORLD"); // "hELLO wORLD"
+```
+
+### noCase(string)
+
+Converts common separated and camelCase input to lowercase words.
+
+```javascript
+const { noCase } = require("superbstring");
+
+noCase("userProfileTitle"); // "user profile title"
+```
+
+### sentenceCase(string)
+
+Converts basic text to sentence case.
+
+```javascript
+const { sentenceCase } = require("superbstring");
+
+sentenceCase("hELLO WORLD. tHIS is A TEST!"); // "Hello world. This is a test!"
 ```
 
 ### isSlug(string)
@@ -712,7 +893,9 @@ getRandomCharacters(10); // for example, "MudjZT5ubk"
 - `decodeUri` uses JavaScript's `decodeURI` and malformed input throws `URIError`.
 - `base64Encode`, `base64Decode`, and `compare` rely on platform `btoa` and `atob` APIs.
 - `chunkText` is character-length based, not token based.
-- `camelCase`, `pascalCase`, `snakeCase`, `kebabCase`, `titleCase`, and `wordCount` use ASCII word-like sequences and avoid locale-specific casing behavior.
+- `camelCase`, `pascalCase`, `snakeCase`, `kebabCase`, `titleCase`, `constantCase`, `pascalSnakeCase`, `trainCase`, `dotCase`, `pathCase`, and `wordCount` use ASCII word-like sequences and avoid locale-specific casing behavior.
+- `lowerCase`, `upperCase`, `invertCase`, `toggleCase`, and `sentenceCase` use JavaScript's native casing methods.
+- `alternateCase1`, `alternateCase2`, and `reverseTitleCase` are included for `case-string` migration compatibility.
 - `charCount` counts Unicode code points, not grapheme clusters.
 - `sentenceCount` counts basic punctuation groups and is not a natural-language sentence parser.
 - `removeMarkdown` is lightweight cleanup, not a full Markdown parser.
