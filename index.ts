@@ -184,7 +184,7 @@ export const extractUrls = (str: string) => {
  * @param {string} str - The input string.
  * @returns {string[]} A list of email addresses.
  */
-export const extractEmails = (str: string) => {
+export const extractEmails = (str: string): string[] => {
   const emails = str.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi) || [];
   return emails;
 };

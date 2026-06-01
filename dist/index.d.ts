@@ -97,7 +97,7 @@ export declare const extractUrls: (str: string) => string[];
  * @param {string} str - The input string.
  * @returns {string[]} A list of email addresses.
  */
-export declare const extractEmails: (str: string) => RegExpMatchArray | [];
+export declare const extractEmails: (str: string) => string[];
 /**
  * Duplicates a given string a specified number of times.
  *

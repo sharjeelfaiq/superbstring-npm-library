@@ -1,4 +1,6 @@
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const test = require("node:test");
 
 const superbString = require("../dist/index.js");
@@ -214,11 +216,29 @@ test("extractUrls returns http and https URLs without trailing punctuation", () 
 });
 
 test("extractEmails returns valid email-looking addresses", () => {
+  assert.deepEqual(superbString.extractEmails("no email here"), []);
+  assert.deepEqual(superbString.extractEmails("Email one@example.com"), ["one@example.com"]);
   assert.deepEqual(superbString.extractEmails("Mail a+b@example.co.uk and user@test.io."), [
     "a+b@example.co.uk",
     "user@test.io",
   ]);
-  assert.deepEqual(superbString.extractEmails("bad @example and a@b"), []);
+  assert.deepEqual(superbString.extractEmails("Copy one@example.com and one@example.com"), [
+    "one@example.com",
+    "one@example.com",
+  ]);
+  assert.deepEqual(superbString.extractEmails("bad @example and a@b and user@example"), []);
+});
+
+test("extractEmails declaration exposes a string array return type", () => {
+  const declarations = fs.readFileSync(
+    path.join(__dirname, "..", "dist", "index.d.ts"),
+    "utf8"
+  );
+
+  assert.match(
+    declarations,
+    /export declare const extractEmails: \(str: string\) => string\[\];/
+  );
 });
 
 test("truncateWords limits text by word count and appends suffix", () => {
