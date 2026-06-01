@@ -8,7 +8,15 @@ This project follows the spirit of [Keep a Changelog](https://keepachangelog.com
 
 ### Added
 
-- Future changes will be listed here before release.
+- Added case conversion utilities: `camelCase`, `pascalCase`, `snakeCase`, `kebabCase`, `titleCase`, and `capitalize`.
+- Added counting utilities: `wordCount`, `charCount`, and `sentenceCount`.
+- Added cleanup utilities: `removeDuplicateLines` and `normalizeUnicode`.
+- Added `isSlug` for lowercase URL slug validation.
+
+### Compatibility
+
+- No breaking changes.
+- No runtime dependencies added.
 
 ## [2.2.0]
 

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.safeJsonParse = exports.removeCodeBlocks = exports.extractCodeBlocks = exports.getRandomCharacters = exports.getDummyText = exports.addSuffix = exports.addPrefix = exports.extractNumber = exports.extractText = exports.decodeUri = exports.encodeUri = exports.rotate13Deg = exports.zalgo = exports.alphabetize = exports.chunkText = exports.splitIntoParagraphs = exports.paraToSingleLine = exports.truncateWords = exports.truncate = exports.slugify = exports.reverse = exports.duplicate = exports.extractEmails = exports.extractUrls = exports.removeMarkdown = exports.stripHtml = exports.normalizeLineEndings = exports.normalizeWhitespace = exports.removeAllSymbols = exports.removeAllSpaces = exports.removeExtraSpaces = exports.base64Decode = exports.compare = exports.base64Encode = exports.joinString = exports.splitString = void 0;
+exports.safeJsonParse = exports.removeCodeBlocks = exports.extractCodeBlocks = exports.getRandomCharacters = exports.getDummyText = exports.addSuffix = exports.addPrefix = exports.extractNumber = exports.extractText = exports.decodeUri = exports.encodeUri = exports.rotate13Deg = exports.zalgo = exports.alphabetize = exports.chunkText = exports.splitIntoParagraphs = exports.paraToSingleLine = exports.truncateWords = exports.truncate = exports.slugify = exports.reverse = exports.duplicate = exports.extractEmails = exports.extractUrls = exports.removeMarkdown = exports.stripHtml = exports.normalizeLineEndings = exports.normalizeWhitespace = exports.isSlug = exports.normalizeUnicode = exports.removeDuplicateLines = exports.sentenceCount = exports.charCount = exports.wordCount = exports.capitalize = exports.titleCase = exports.kebabCase = exports.snakeCase = exports.pascalCase = exports.camelCase = exports.removeAllSymbols = exports.removeAllSpaces = exports.removeExtraSpaces = exports.base64Decode = exports.compare = exports.base64Encode = exports.joinString = exports.splitString = void 0;
 /**
  * Replaces delimiter occurrences in a string with newline characters.
  *
@@ -103,6 +103,152 @@ const removeAllSymbols = (str) => {
     return symbolFreeStr;
 };
 exports.removeAllSymbols = removeAllSymbols;
+const getAsciiWords = (str) => {
+    return str.match(/[0-9A-Za-z]+/g) || [];
+};
+const lowerAsciiWord = (word) => {
+    return word.toLowerCase();
+};
+const capitalizeAsciiWord = (word) => {
+    const lowerWord = lowerAsciiWord(word);
+    return lowerWord.charAt(0).toUpperCase() + lowerWord.slice(1);
+};
+/**
+ * Converts a string to camelCase using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The camelCase string.
+ */
+const camelCase = (str) => {
+    const words = getAsciiWords(str);
+    return words
+        .map((word, index) => {
+        return index === 0 ? lowerAsciiWord(word) : capitalizeAsciiWord(word);
+    })
+        .join("");
+};
+exports.camelCase = camelCase;
+/**
+ * Converts a string to PascalCase using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The PascalCase string.
+ */
+const pascalCase = (str) => {
+    return getAsciiWords(str).map(capitalizeAsciiWord).join("");
+};
+exports.pascalCase = pascalCase;
+/**
+ * Converts a string to snake_case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The snake_case string.
+ */
+const snakeCase = (str) => {
+    return getAsciiWords(str).map(lowerAsciiWord).join("_");
+};
+exports.snakeCase = snakeCase;
+/**
+ * Converts a string to kebab-case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The kebab-case string.
+ */
+const kebabCase = (str) => {
+    return getAsciiWords(str).map(lowerAsciiWord).join("-");
+};
+exports.kebabCase = kebabCase;
+/**
+ * Converts a string to Title Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Title Case string.
+ */
+const titleCase = (str) => {
+    return getAsciiWords(str).map(capitalizeAsciiWord).join(" ");
+};
+exports.titleCase = titleCase;
+/**
+ * Uppercases the first character and leaves the rest unchanged.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The capitalized string.
+ */
+const capitalize = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+exports.capitalize = capitalize;
+/**
+ * Counts ASCII word-like sequences in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The word count.
+ */
+const wordCount = (str) => {
+    return getAsciiWords(str).length;
+};
+exports.wordCount = wordCount;
+/**
+ * Counts Unicode code points in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The character count.
+ */
+const charCount = (str) => {
+    return Array.from(str).length;
+};
+exports.charCount = charCount;
+/**
+ * Counts basic sentence-ending punctuation groups.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The sentence count.
+ */
+const sentenceCount = (str) => {
+    const sentences = str.match(/[.!?]+/g) || [];
+    return sentences.length;
+};
+exports.sentenceCount = sentenceCount;
+/**
+ * Removes repeated lines while preserving the first occurrence order.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The text without duplicate lines.
+ */
+const removeDuplicateLines = (str) => {
+    const seen = new Set();
+    const lines = (0, exports.normalizeLineEndings)(str).split("\n");
+    const uniqueLines = lines.filter((line) => {
+        if (seen.has(line)) {
+            return false;
+        }
+        seen.add(line);
+        return true;
+    });
+    return uniqueLines.join("\n");
+};
+exports.removeDuplicateLines = removeDuplicateLines;
+/**
+ * Normalizes Unicode using the native String.prototype.normalize method.
+ *
+ * @param {string} str - The input string.
+ * @param {"NFC" | "NFD" | "NFKC" | "NFKD"} [form="NFC"] - The normalization form.
+ * @returns {string} The normalized string.
+ */
+const normalizeUnicode = (str, form = "NFC") => {
+    return str.normalize(form);
+};
+exports.normalizeUnicode = normalizeUnicode;
+/**
+ * Checks whether a string is a lowercase URL slug.
+ *
+ * @param {string} str - The input string.
+ * @returns {boolean} True when the string is a valid slug.
+ */
+const isSlug = (str) => {
+    return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(str);
+};
+exports.isSlug = isSlug;
 /**
  * Collapses repeated whitespace into single spaces and trims the result.
  *

@@ -12,6 +12,9 @@ test("exports every documented public API", () => {
     "alphabetize",
     "base64Decode",
     "base64Encode",
+    "camelCase",
+    "capitalize",
+    "charCount",
     "chunkText",
     "compare",
     "decodeUri",
@@ -24,24 +27,33 @@ test("exports every documented public API", () => {
     "extractUrls",
     "getDummyText",
     "getRandomCharacters",
+    "isSlug",
     "joinString",
+    "kebabCase",
     "normalizeLineEndings",
+    "normalizeUnicode",
     "normalizeWhitespace",
     "paraToSingleLine",
+    "pascalCase",
     "removeAllSpaces",
     "removeAllSymbols",
     "removeCodeBlocks",
+    "removeDuplicateLines",
     "removeExtraSpaces",
     "removeMarkdown",
     "reverse",
     "rotate13Deg",
     "safeJsonParse",
+    "sentenceCount",
     "slugify",
+    "snakeCase",
     "splitIntoParagraphs",
     "splitString",
     "stripHtml",
+    "titleCase",
     "truncate",
     "truncateWords",
+    "wordCount",
     "zalgo",
   ]);
 });
@@ -104,6 +116,76 @@ test("slugify lowercases, hyphenates spaces, and removes punctuation", () => {
   assert.equal(superbString.slugify("Hello, World!"), "hello-world");
   assert.equal(superbString.slugify("Already-slugged"), "already-slugged");
   assert.equal(superbString.slugify(""), "");
+});
+
+test("case conversion helpers handle spaces, separators, numbers, and empty strings", () => {
+  assert.equal(superbString.camelCase("hello world"), "helloWorld");
+  assert.equal(superbString.camelCase("  user-id_value 42  "), "userIdValue42");
+  assert.equal(superbString.camelCase("AlreadyMixed_value"), "alreadymixedValue");
+  assert.equal(superbString.camelCase(""), "");
+
+  assert.equal(superbString.pascalCase("hello world"), "HelloWorld");
+  assert.equal(superbString.pascalCase("user-id_value 42"), "UserIdValue42");
+  assert.equal(superbString.pascalCase(""), "");
+
+  assert.equal(superbString.snakeCase("hello world"), "hello_world");
+  assert.equal(superbString.snakeCase("user-id value_42"), "user_id_value_42");
+  assert.equal(superbString.snakeCase("Hello, World!"), "hello_world");
+  assert.equal(superbString.snakeCase(""), "");
+
+  assert.equal(superbString.kebabCase("hello world"), "hello-world");
+  assert.equal(superbString.kebabCase("user_id value-42"), "user-id-value-42");
+  assert.equal(superbString.kebabCase("Hello, World!"), "hello-world");
+  assert.equal(superbString.kebabCase(""), "");
+
+  assert.equal(superbString.titleCase("hello world"), "Hello World");
+  assert.equal(superbString.titleCase("user-id_value 42"), "User Id Value 42");
+  assert.equal(superbString.titleCase("hello, world!"), "Hello World");
+  assert.equal(superbString.titleCase(""), "");
+
+  assert.equal(superbString.capitalize("hello world"), "Hello world");
+  assert.equal(superbString.capitalize("h"), "H");
+  assert.equal(superbString.capitalize(""), "");
+});
+
+test("counting helpers return predictable basic counts", () => {
+  assert.equal(superbString.wordCount("Hello, world! 123"), 3);
+  assert.equal(superbString.wordCount("  multiple   spaces_and-hyphens  "), 4);
+  assert.equal(superbString.wordCount(""), 0);
+
+  assert.equal(superbString.charCount("hello"), 5);
+  assert.equal(superbString.charCount("a🙂"), 2);
+  assert.equal(superbString.charCount(""), 0);
+
+  assert.equal(superbString.sentenceCount("One. Two! Three?"), 3);
+  assert.equal(superbString.sentenceCount("Wait... really?! Yes."), 3);
+  assert.equal(superbString.sentenceCount("No ending punctuation"), 0);
+  assert.equal(superbString.sentenceCount(""), 0);
+});
+
+test("cleanup helpers remove duplicate lines and normalize unicode", () => {
+  assert.equal(
+    superbString.removeDuplicateLines("first\nsecond\nfirst\n\nsecond\nthird"),
+    "first\nsecond\n\nthird"
+  );
+  assert.equal(superbString.removeDuplicateLines("same\r\nsame\r\nother"), "same\nother");
+  assert.equal(superbString.removeDuplicateLines(""), "");
+
+  assert.equal(superbString.normalizeUnicode("e\u0301"), "\u00e9");
+  assert.equal(superbString.normalizeUnicode("\u00e9", "NFD"), "e\u0301");
+  assert.equal(superbString.normalizeUnicode("", "NFKC"), "");
+});
+
+test("isSlug validates lowercase URL slug format", () => {
+  assert.equal(superbString.isSlug("hello-world-123"), true);
+  assert.equal(superbString.isSlug("hello"), true);
+  assert.equal(superbString.isSlug(""), false);
+  assert.equal(superbString.isSlug("Hello-world"), false);
+  assert.equal(superbString.isSlug("-hello"), false);
+  assert.equal(superbString.isSlug("hello-"), false);
+  assert.equal(superbString.isSlug("hello--world"), false);
+  assert.equal(superbString.isSlug("hello_world"), false);
+  assert.equal(superbString.isSlug("hello world"), false);
 });
 
 test("truncate returns a substring up to the requested length", () => {

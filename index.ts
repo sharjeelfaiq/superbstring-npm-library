@@ -101,6 +101,159 @@ export const removeAllSymbols = (str: string) => {
   return symbolFreeStr;
 };
 
+const getAsciiWords = (str: string) => {
+  return str.match(/[0-9A-Za-z]+/g) || [];
+};
+
+const lowerAsciiWord = (word: string) => {
+  return word.toLowerCase();
+};
+
+const capitalizeAsciiWord = (word: string) => {
+  const lowerWord = lowerAsciiWord(word);
+  return lowerWord.charAt(0).toUpperCase() + lowerWord.slice(1);
+};
+
+/**
+ * Converts a string to camelCase using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The camelCase string.
+ */
+export const camelCase = (str: string) => {
+  const words = getAsciiWords(str);
+  return words
+    .map((word, index) => {
+      return index === 0 ? lowerAsciiWord(word) : capitalizeAsciiWord(word);
+    })
+    .join("");
+};
+
+/**
+ * Converts a string to PascalCase using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The PascalCase string.
+ */
+export const pascalCase = (str: string) => {
+  return getAsciiWords(str).map(capitalizeAsciiWord).join("");
+};
+
+/**
+ * Converts a string to snake_case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The snake_case string.
+ */
+export const snakeCase = (str: string) => {
+  return getAsciiWords(str).map(lowerAsciiWord).join("_");
+};
+
+/**
+ * Converts a string to kebab-case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The kebab-case string.
+ */
+export const kebabCase = (str: string) => {
+  return getAsciiWords(str).map(lowerAsciiWord).join("-");
+};
+
+/**
+ * Converts a string to Title Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Title Case string.
+ */
+export const titleCase = (str: string) => {
+  return getAsciiWords(str).map(capitalizeAsciiWord).join(" ");
+};
+
+/**
+ * Uppercases the first character and leaves the rest unchanged.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The capitalized string.
+ */
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+/**
+ * Counts ASCII word-like sequences in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The word count.
+ */
+export const wordCount = (str: string) => {
+  return getAsciiWords(str).length;
+};
+
+/**
+ * Counts Unicode code points in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The character count.
+ */
+export const charCount = (str: string) => {
+  return Array.from(str).length;
+};
+
+/**
+ * Counts basic sentence-ending punctuation groups.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The sentence count.
+ */
+export const sentenceCount = (str: string) => {
+  const sentences = str.match(/[.!?]+/g) || [];
+  return sentences.length;
+};
+
+/**
+ * Removes repeated lines while preserving the first occurrence order.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The text without duplicate lines.
+ */
+export const removeDuplicateLines = (str: string) => {
+  const seen = new Set<string>();
+  const lines = normalizeLineEndings(str).split("\n");
+  const uniqueLines = lines.filter((line) => {
+    if (seen.has(line)) {
+      return false;
+    }
+
+    seen.add(line);
+    return true;
+  });
+  return uniqueLines.join("\n");
+};
+
+/**
+ * Normalizes Unicode using the native String.prototype.normalize method.
+ *
+ * @param {string} str - The input string.
+ * @param {"NFC" | "NFD" | "NFKC" | "NFKD"} [form="NFC"] - The normalization form.
+ * @returns {string} The normalized string.
+ */
+export const normalizeUnicode = (
+  str: string,
+  form: "NFC" | "NFD" | "NFKC" | "NFKD" = "NFC"
+) => {
+  return str.normalize(form);
+};
+
+/**
+ * Checks whether a string is a lowercase URL slug.
+ *
+ * @param {string} str - The input string.
+ * @returns {boolean} True when the string is a valid slug.
+ */
+export const isSlug = (str: string) => {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(str);
+};
+
 /**
  * Collapses repeated whitespace into single spaces and trims the result.
  *

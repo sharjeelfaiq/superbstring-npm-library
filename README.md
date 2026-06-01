@@ -17,7 +17,8 @@ SuperbString is a zero-dependency JavaScript and TypeScript string utilities pac
 - Text cleanup utilities for whitespace normalization and symbol removal
 - AI, LLM, and RAG helpers for prompt cleanup and context preparation
 - Encoding helpers for Base64 and URI encoding
-- Formatting helpers for slugs, truncation, prefixes, suffixes, and ROT13
+- Formatting helpers for slugs, case conversion, truncation, prefixes, suffixes, and ROT13
+- Counting helpers for words, characters, and basic sentences
 - String extraction helpers for text and numbers
 
 ## Installation
@@ -62,6 +63,17 @@ const chunks = chunkText(plainText, 500);
 console.log(chunks); // ["Intro\nUseful context."]
 ```
 
+Case conversion and counting:
+
+```javascript
+const { camelCase, kebabCase, wordCount, removeDuplicateLines } = require("superbstring");
+
+console.log(camelCase("user profile-title")); // "userProfileTitle"
+console.log(kebabCase("User_Profile Title")); // "user-profile-title"
+console.log(wordCount("Clean, useful text.")); // 3
+console.log(removeDuplicateLines("alpha\nbeta\nalpha")); // "alpha\nbeta"
+```
+
 ## AI & LLM Text Utilities
 
 SuperbString includes lightweight helpers for prompt cleanup, RAG preprocessing, context preparation, structured extraction, and LLM output handling. These utilities do not call any model APIs, make network requests, or add tokenizer dependencies.
@@ -72,6 +84,7 @@ SuperbString includes lightweight helpers for prompt cleanup, RAG preprocessing,
 | --- | --- |
 | `normalizeWhitespace` | Collapse repeated whitespace and trim text |
 | `normalizeLineEndings` | Convert CRLF, CR, and LF to a consistent newline style |
+| `normalizeUnicode` | Normalize Unicode using a native normalization form |
 
 ### Content Cleanup
 
@@ -80,6 +93,7 @@ SuperbString includes lightweight helpers for prompt cleanup, RAG preprocessing,
 | `stripHtml` | Remove HTML comments and tags |
 | `removeMarkdown` | Remove common Markdown syntax |
 | `removeCodeBlocks` | Remove triple-backtick fenced code blocks |
+| `removeDuplicateLines` | Remove repeated lines while preserving first occurrences |
 
 ### RAG Preparation
 
@@ -103,6 +117,26 @@ SuperbString includes lightweight helpers for prompt cleanup, RAG preprocessing,
 | --- | --- |
 | `safeJsonParse` | Parse JSON without throwing |
 
+### Case Conversion
+
+| Function | Purpose |
+| --- | --- |
+| `camelCase` | Convert text to camelCase |
+| `pascalCase` | Convert text to PascalCase |
+| `snakeCase` | Convert text to snake_case |
+| `kebabCase` | Convert text to kebab-case |
+| `titleCase` | Convert text to Title Case |
+| `capitalize` | Uppercase the first character |
+| `isSlug` | Validate lowercase URL slug format |
+
+### Counting
+
+| Function | Purpose |
+| --- | --- |
+| `wordCount` | Count ASCII word-like sequences |
+| `charCount` | Count Unicode code points |
+| `sentenceCount` | Count basic sentence-ending punctuation groups |
+
 ## String Utilities
 
 Use these JavaScript string utilities for common string manipulation tasks.
@@ -116,6 +150,9 @@ Use these JavaScript string utilities for common string manipulation tasks.
 | `truncate` | Return a substring up to a max length |
 | `alphabetize` | Sort space-separated words |
 | `getRandomCharacters` | Generate a random character string |
+| `wordCount` | Count ASCII word-like sequences |
+| `charCount` | Count Unicode code points |
+| `sentenceCount` | Count basic sentence-ending punctuation groups |
 
 ## Text Processing
 
@@ -125,11 +162,13 @@ Use these TypeScript string utilities for text processing, text cleanup, and par
 | --- | --- |
 | `normalizeWhitespace` | Collapse repeated whitespace and trim text |
 | `normalizeLineEndings` | Normalize CRLF, CR, and LF line endings |
+| `normalizeUnicode` | Normalize Unicode with `String.prototype.normalize` |
 | `stripHtml` | Remove HTML comments and tags |
 | `removeMarkdown` | Remove common Markdown syntax |
 | `removeExtraSpaces` | Normalize whitespace and remove spaces before punctuation |
 | `removeAllSpaces` | Remove all whitespace |
 | `removeAllSymbols` | Keep alphanumeric characters and spaces |
+| `removeDuplicateLines` | Remove repeated lines while preserving first occurrences |
 | `paraToSingleLine` | Collapse whitespace into one line |
 | `extractText` | Keep letters and spaces only |
 | `extractNumber` | Keep digits and spaces only |
@@ -156,6 +195,13 @@ Use these helpers for string formatting, slug generation, decoration, and affixe
 | Function | Purpose |
 | --- | --- |
 | `slugify` | Create URL-friendly slugs |
+| `camelCase` | Convert text to camelCase |
+| `pascalCase` | Convert text to PascalCase |
+| `snakeCase` | Convert text to snake_case |
+| `kebabCase` | Convert text to kebab-case |
+| `titleCase` | Convert text to Title Case |
+| `capitalize` | Uppercase the first character |
+| `isSlug` | Validate lowercase URL slug format |
 | `addPrefix` | Add a prefix |
 | `addSuffix` | Add a suffix |
 | `rotate13Deg` | Apply ROT13 to letters |
@@ -267,6 +313,17 @@ normalizeLineEndings("a\r\nb\rc"); // "a\nb\nc"
 normalizeLineEndings("a\nb", "\r\n"); // "a\r\nb"
 ```
 
+### normalizeUnicode(string, form = "NFC")
+
+Normalizes Unicode using native `String.prototype.normalize`.
+
+```javascript
+const { normalizeUnicode } = require("superbstring");
+
+normalizeUnicode("e\u0301"); // "\u00e9"
+normalizeUnicode("\u00e9", "NFD"); // "e\u0301"
+```
+
 ### stripHtml(string)
 
 Removes HTML comments and tags. This is tag removal for text cleanup, not a browser security sanitizer.
@@ -285,6 +342,16 @@ Removes common Markdown markers while keeping readable text. This is lightweight
 const { removeMarkdown } = require("superbstring");
 
 removeMarkdown("## Hi\n**bold** [site](https://example.com)"); // "Hi\nbold site"
+```
+
+### removeDuplicateLines(string)
+
+Removes repeated lines while preserving the first occurrence order. CRLF and CR line endings are normalized to LF.
+
+```javascript
+const { removeDuplicateLines } = require("superbstring");
+
+removeDuplicateLines("first\nsecond\nfirst"); // "first\nsecond"
 ```
 
 ### duplicate(string, count = 2)
@@ -317,6 +384,77 @@ const { slugify } = require("superbstring");
 slugify("Hello, World!"); // "hello-world"
 ```
 
+### camelCase(string)
+
+Converts ASCII word-like sequences to camelCase.
+
+```javascript
+const { camelCase } = require("superbstring");
+
+camelCase("user profile-title"); // "userProfileTitle"
+```
+
+### pascalCase(string)
+
+Converts ASCII word-like sequences to PascalCase.
+
+```javascript
+const { pascalCase } = require("superbstring");
+
+pascalCase("user profile-title"); // "UserProfileTitle"
+```
+
+### snakeCase(string)
+
+Converts ASCII word-like sequences to snake_case.
+
+```javascript
+const { snakeCase } = require("superbstring");
+
+snakeCase("User Profile-Title"); // "user_profile_title"
+```
+
+### kebabCase(string)
+
+Converts ASCII word-like sequences to kebab-case.
+
+```javascript
+const { kebabCase } = require("superbstring");
+
+kebabCase("User_Profile Title"); // "user-profile-title"
+```
+
+### titleCase(string)
+
+Converts ASCII word-like sequences to Title Case.
+
+```javascript
+const { titleCase } = require("superbstring");
+
+titleCase("user_profile-title"); // "User Profile Title"
+```
+
+### capitalize(string)
+
+Uppercases the first character and leaves the rest unchanged.
+
+```javascript
+const { capitalize } = require("superbstring");
+
+capitalize("hello world"); // "Hello world"
+```
+
+### isSlug(string)
+
+Returns `true` for lowercase URL slugs made from letters, numbers, and single hyphens. Leading, trailing, and repeated hyphens are rejected.
+
+```javascript
+const { isSlug } = require("superbstring");
+
+isSlug("hello-world-123"); // true
+isSlug("Hello--world"); // false
+```
+
 ### truncate(string, maxLength)
 
 Returns `string.substring(0, maxLength)`.
@@ -335,6 +473,36 @@ Limits text by word count and appends a suffix only when truncation occurs.
 const { truncateWords } = require("superbstring");
 
 truncateWords("one two three", 2); // "one two..."
+```
+
+### wordCount(string)
+
+Counts ASCII word-like sequences.
+
+```javascript
+const { wordCount } = require("superbstring");
+
+wordCount("Hello, world! 123"); // 3
+```
+
+### charCount(string)
+
+Counts Unicode code points using `Array.from`.
+
+```javascript
+const { charCount } = require("superbstring");
+
+charCount("a🙂"); // 2
+```
+
+### sentenceCount(string)
+
+Counts basic sentence-ending punctuation groups using `.`, `!`, and `?`.
+
+```javascript
+const { sentenceCount } = require("superbstring");
+
+sentenceCount("One. Two! Three?"); // 3
 ```
 
 ### paraToSingleLine(string)
@@ -544,8 +712,12 @@ getRandomCharacters(10); // for example, "MudjZT5ubk"
 - `decodeUri` uses JavaScript's `decodeURI` and malformed input throws `URIError`.
 - `base64Encode`, `base64Decode`, and `compare` rely on platform `btoa` and `atob` APIs.
 - `chunkText` is character-length based, not token based.
+- `camelCase`, `pascalCase`, `snakeCase`, `kebabCase`, `titleCase`, and `wordCount` use ASCII word-like sequences and avoid locale-specific casing behavior.
+- `charCount` counts Unicode code points, not grapheme clusters.
+- `sentenceCount` counts basic punctuation groups and is not a natural-language sentence parser.
 - `removeMarkdown` is lightweight cleanup, not a full Markdown parser.
 - `stripHtml` removes tags for text cleanup and is not a sanitizer for browser security.
+- `normalizeUnicode` uses native `String.prototype.normalize` and the runtime's Unicode normalization behavior.
 - `safeJsonParse` does not repair invalid JSON.
 
 ## TypeScript Support
@@ -553,9 +725,10 @@ getRandomCharacters(10); // for example, "MudjZT5ubk"
 SuperbString includes generated TypeScript declaration files through the package `types` field. Named imports work in TypeScript projects:
 
 ```typescript
-import { slugify, truncate, extractNumber, chunkText } from "superbstring";
+import { slugify, camelCase, truncate, extractNumber, chunkText } from "superbstring";
 
 const slug: string = slugify("Hello, World!");
+const key: string = camelCase("hello world");
 const summary: string = truncate("Big Cat lives in the Jungle", 13);
 const numbers: string = extractNumber("Order #123");
 const chunks: string[] = chunkText("context for retrieval", 500);

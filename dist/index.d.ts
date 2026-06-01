@@ -56,6 +56,91 @@ export declare const removeAllSpaces: (str: string) => string;
  */
 export declare const removeAllSymbols: (str: string) => string;
 /**
+ * Converts a string to camelCase using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The camelCase string.
+ */
+export declare const camelCase: (str: string) => string;
+/**
+ * Converts a string to PascalCase using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The PascalCase string.
+ */
+export declare const pascalCase: (str: string) => string;
+/**
+ * Converts a string to snake_case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The snake_case string.
+ */
+export declare const snakeCase: (str: string) => string;
+/**
+ * Converts a string to kebab-case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The kebab-case string.
+ */
+export declare const kebabCase: (str: string) => string;
+/**
+ * Converts a string to Title Case using ASCII word boundaries.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The Title Case string.
+ */
+export declare const titleCase: (str: string) => string;
+/**
+ * Uppercases the first character and leaves the rest unchanged.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The capitalized string.
+ */
+export declare const capitalize: (str: string) => string;
+/**
+ * Counts ASCII word-like sequences in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The word count.
+ */
+export declare const wordCount: (str: string) => number;
+/**
+ * Counts Unicode code points in a string.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The character count.
+ */
+export declare const charCount: (str: string) => number;
+/**
+ * Counts basic sentence-ending punctuation groups.
+ *
+ * @param {string} str - The input string.
+ * @returns {number} The sentence count.
+ */
+export declare const sentenceCount: (str: string) => number;
+/**
+ * Removes repeated lines while preserving the first occurrence order.
+ *
+ * @param {string} str - The input string.
+ * @returns {string} The text without duplicate lines.
+ */
+export declare const removeDuplicateLines: (str: string) => string;
+/**
+ * Normalizes Unicode using the native String.prototype.normalize method.
+ *
+ * @param {string} str - The input string.
+ * @param {"NFC" | "NFD" | "NFKC" | "NFKD"} [form="NFC"] - The normalization form.
+ * @returns {string} The normalized string.
+ */
+export declare const normalizeUnicode: (str: string, form?: "NFC" | "NFD" | "NFKC" | "NFKD") => string;
+/**
+ * Checks whether a string is a lowercase URL slug.
+ *
+ * @param {string} str - The input string.
+ * @returns {boolean} True when the string is a valid slug.
+ */
+export declare const isSlug: (str: string) => boolean;
+/**
  * Collapses repeated whitespace into single spaces and trims the result.
  *
  * @param {string} str - The input string.
