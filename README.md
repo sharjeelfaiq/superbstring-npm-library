@@ -385,6 +385,8 @@ const numbers: string = extractNumber("Order #123");
 - [Changelog](CHANGELOG.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security Policy](SECURITY.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [GitHub Issues](https://github.com/sharjeelfaiq/superbstring/issues)
 
 ## License
 
